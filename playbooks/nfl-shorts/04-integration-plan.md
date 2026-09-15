@@ -271,6 +271,13 @@ per npm nach. Falls Codex nicht angemeldet ist: `!codex login`.
 | `/codex:result` | Ergebnis eines abgeschlossenen Jobs |
 | `/codex:cancel` | Laufenden Hintergrund-Job abbrechen |
 
+> **Zusammengeführt mit der Session „Codex mit Claude/Vault verbinden".** Die
+> hatte drei Wege genannt (gemeinsamer Ordner, MCP-Bridge, Shell-Exec) und lag
+> bei der MCP-Variante aus demselben Grund daneben wie diese Session hier. Der
+> gemeinsame Ordner ist dagegen richtig — und beantwortet zugleich die
+> Vault-Frage. Der vollständige, abgeglichene Weg inklusive Vault-Einrichtung
+> steht in [`docs/codex-and-vault.md`](../../docs/codex-and-vault.md).
+
 ### Die Gegenrichtung steht schon
 
 `/watch` in Codex nutzen geht bereits — das Repo hat `.codex-plugin/plugin.json`,
