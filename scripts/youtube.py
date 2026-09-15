@@ -38,6 +38,7 @@ import re
 import secrets
 import ssl
 import sys
+import time
 import urllib.error
 import urllib.parse
 import webbrowser
@@ -68,6 +69,11 @@ RETENTION_MAX_RESULTS = 200
 # Shorts run to three minutes since the 2024 change; used as the --short-form
 # cutoff, not as a claim about what YouTube labels a Short.
 SHORT_FORM_MAX_SECONDS = 180
+
+# Upper bound on the loopback wait during `auth`. Long enough for a real consent
+# click including a password prompt, short enough that a broken redirect fails
+# with a message instead of hanging the terminal.
+OAUTH_CALLBACK_TIMEOUT = 180.0
 
 USER_AGENT = "watch-skill/1.0 (+claude-code; python-urllib)"
 
@@ -209,12 +215,33 @@ def load_client_credentials() -> tuple[str, str]:
 
 
 def _write_token(token: dict) -> None:
+    """Persist the refresh token, readable only by the owner.
+
+    write_text() + chmod() is not good enough: the file is created under the
+    process umask (0644 on a default 022) and stays world-readable until the
+    chmod lands — and if the chmod fails the credential keeps whatever mode it
+    had. We therefore create a fresh file with 0600 from the outset and swap it
+    in atomically, so the token is never observable by other local users.
+    """
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    TOKEN_FILE.write_text(json.dumps(token, indent=2), encoding="utf-8")
+    tmp = TOKEN_FILE.with_name(f"{TOKEN_FILE.name}.{os.getpid()}.tmp")
     try:
-        TOKEN_FILE.chmod(0o600)
-    except OSError:
-        print(f"[youtube] could not chmod 600 {TOKEN_FILE}", file=sys.stderr)
+        fd = os.open(tmp, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    except OSError as exc:
+        # Fail closed — writing the token insecurely is worse than not at all.
+        raise SystemExit(
+            f"[youtube] cannot create {tmp} with mode 600: {exc}"
+        ) from exc
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(json.dumps(token, indent=2))
+        os.replace(tmp, TOKEN_FILE)
+    except BaseException:
+        try:
+            tmp.unlink()
+        except OSError:
+            pass
+        raise
 
 
 def _read_token() -> dict:
@@ -275,11 +302,28 @@ class _CallbackHandler(BaseHTTPRequestHandler):
     state: str | None = None
     error: str | None = None
 
+    @classmethod
+    def reset(cls) -> None:
+        cls.code = cls.state = cls.error = None
+
     def do_GET(self):  # noqa: N802 (stdlib naming)
         query = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
-        _CallbackHandler.code = (query.get("code") or [None])[0]
-        _CallbackHandler.state = (query.get("state") or [None])[0]
-        _CallbackHandler.error = (query.get("error") or [None])[0]
+        code = (query.get("code") or [None])[0]
+        state = (query.get("state") or [None])[0]
+        error = (query.get("error") or [None])[0]
+        # Browsers also request /favicon.ico on this port, and a user may reload
+        # the tab. Only record requests that actually carry OAuth parameters —
+        # otherwise a stray GET would wipe a callback we already captured.
+        if code or error:
+            _CallbackHandler.code = code
+            _CallbackHandler.state = state
+            _CallbackHandler.error = error
+        else:
+            self.send_response(404)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(b"<html><body><p>Waiting for the OAuth callback.</p></body></html>")
+            return
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.end_headers()
@@ -292,9 +336,38 @@ class _CallbackHandler(BaseHTTPRequestHandler):
         pass
 
 
+def _wait_for_callback(server: HTTPServer, expected_state: str,
+                       timeout: float = OAUTH_CALLBACK_TIMEOUT) -> None:
+    """Serve loopback requests until the OAuth callback lands or time runs out.
+
+    A bare handle_request() blocks forever when the browser never reaches the
+    listener, the user closes the consent tab, or Google simply never redirects
+    — the first-run flow then hangs with no way out but killing the process.
+    """
+    deadline = time.monotonic() + timeout
+    while True:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise SystemExit(
+                f"Timed out after {timeout:.0f}s waiting for the OAuth callback.\n"
+                "  Re-run `auth`. If the browser cannot reach 127.0.0.1, open the\n"
+                "  printed URL manually in a browser on this machine."
+            )
+        server.timeout = min(1.0, remaining)
+        server.handle_request()          # returns on timeout too, thanks to server.timeout
+        if _CallbackHandler.error:
+            raise SystemExit(f"Authorisation denied: {_CallbackHandler.error}")
+        if _CallbackHandler.code:
+            if _CallbackHandler.state != expected_state:
+                raise SystemExit("OAuth state mismatch — aborting.")
+            return
+        # anything else was a stray request; keep waiting until the deadline
+
+
 def run_auth_flow() -> dict:
     client_id, client_secret = load_client_credentials()
     state = secrets.token_urlsafe(24)
+    _CallbackHandler.reset()   # class state survives across runs in one process
 
     server = HTTPServer(("127.0.0.1", 0), _CallbackHandler)
     redirect_uri = f"http://127.0.0.1:{server.server_port}"
@@ -316,15 +389,10 @@ def run_auth_flow() -> dict:
     except Exception:
         pass
 
-    server.handle_request()
-    server.server_close()
-
-    if _CallbackHandler.error:
-        raise SystemExit(f"Authorisation denied: {_CallbackHandler.error}")
-    if not _CallbackHandler.code:
-        raise SystemExit("No authorisation code received.")
-    if _CallbackHandler.state != state:
-        raise SystemExit("OAuth state mismatch — aborting.")
+    try:
+        _wait_for_callback(server, state)
+    finally:
+        server.server_close()
 
     payload = _post_form(TOKEN_ENDPOINT, {
         "code": _CallbackHandler.code,
@@ -393,43 +461,52 @@ def cmd_videos(args) -> int:
         raise SystemExit("No channel found for this account.")
     uploads = items[0]["contentDetails"]["relatedPlaylists"]["uploads"]
 
-    video_ids: list[str] = []
+    # --limit counts videos we RETURN, not uploads we inspect. With
+    # --short-form on a mixed-format channel the old code stopped after
+    # args.limit uploads and only then dropped the long ones, so the caller
+    # silently got fewer rows than asked for — sometimes none — while
+    # qualifying shorts sat one page further down.
+    rows: list[dict] = []
     page_token = None
-    while len(video_ids) < args.limit:
+    while len(rows) < args.limit:
         params = {"part": "contentDetails", "playlistId": uploads,
-                  "maxResults": min(50, args.limit - len(video_ids))}
+                  "maxResults": 50 if args.short_form
+                  else min(50, args.limit - len(rows))}
         if page_token:
             params["pageToken"] = page_token
         page = api_get(f"{DATA_API}/playlistItems", params, access)
-        video_ids += [i["contentDetails"]["videoId"] for i in page.get("items", [])]
+        batch = [i["contentDetails"]["videoId"] for i in page.get("items", [])]
         page_token = page.get("nextPageToken")
-        if not page_token:
-            break
 
-    rows: list[dict] = []
-    for chunk_start in range(0, len(video_ids), 50):
-        chunk = video_ids[chunk_start:chunk_start + 50]
-        detail = api_get(f"{DATA_API}/videos",
-                         {"part": "snippet,statistics,contentDetails",
-                          "id": ",".join(chunk)}, access)
-        for v in detail.get("items", []):
-            seconds = parse_iso8601_duration(
-                v.get("contentDetails", {}).get("duration", ""))
-            if args.short_form and (seconds is None
-                                    or seconds > SHORT_FORM_MAX_SECONDS):
+        for chunk_start in range(0, len(batch), 50):
+            chunk = batch[chunk_start:chunk_start + 50]
+            if not chunk:
                 continue
-            stats = v.get("statistics", {})
-            rows.append({
-                "video_id": v["id"],
-                "title": v["snippet"]["title"],
-                "published_at": v["snippet"]["publishedAt"],
-                "duration_seconds": seconds,
-                "views": int(stats.get("viewCount", 0)),
-                "likes": int(stats.get("likeCount", 0)),
-                "comments": int(stats.get("commentCount", 0)),
-            })
+            detail = api_get(f"{DATA_API}/videos",
+                             {"part": "snippet,statistics,contentDetails",
+                              "id": ",".join(chunk)}, access)
+            for v in detail.get("items", []):
+                seconds = parse_iso8601_duration(
+                    v.get("contentDetails", {}).get("duration", ""))
+                if args.short_form and (seconds is None
+                                        or seconds > SHORT_FORM_MAX_SECONDS):
+                    continue
+                stats = v.get("statistics", {})
+                rows.append({
+                    "video_id": v["id"],
+                    "title": v["snippet"]["title"],
+                    "published_at": v["snippet"]["publishedAt"],
+                    "duration_seconds": seconds,
+                    "views": int(stats.get("viewCount", 0)),
+                    "likes": int(stats.get("likeCount", 0)),
+                    "comments": int(stats.get("commentCount", 0)),
+                })
+
+        if not page_token:
+            break   # uploads playlist exhausted
 
     rows.sort(key=lambda r: r["views"], reverse=True)
+    rows = rows[:args.limit]
     print(json.dumps(rows, indent=2))
     return 0
 
