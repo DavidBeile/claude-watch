@@ -15,6 +15,7 @@ fixtures/      export-ignore
 assets/        export-ignore
 examples/      export-ignore
 playbooks/     export-ignore
+HANDOFF.md     export-ignore
 
 # NOTE: commands/, hooks/, and .claude-plugin/ are NOT export-ignored because
 # Claude Code's /plugin install fetches this same git archive tarball — they
