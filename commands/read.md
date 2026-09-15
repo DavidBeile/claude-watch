@@ -4,10 +4,10 @@ argument-hint: <url> [why you're reading it]
 allowed-tools: [Bash, Read, Edit, AskUserQuestion]
 ---
 
-# /read — Claude reads a web page
+# /watch:read — Claude reads a web page
 
 The text sibling of `/watch`. Where `/watch` turns a video into an ingest-shaped
-`report.md`, `/read` does the same for a web page. Everything downstream of the
+`report.md`, `/watch:read` does the same for a web page. Everything downstream of the
 fetch — the report schema, the vault staging, the ingest gate — is shared, so a
 watched video and a read article land in the vault as the same kind of artifact.
 
@@ -33,7 +33,7 @@ restart of Claude Code, not `--continue`.
 
 ## Step 1 — parse the input
 
-Separate the URL from the intent, exactly as `/watch` does. `/read <url> what's
+Separate the URL from the intent, exactly as `/watch` does. `/watch:read <url> what's
 their pricing model?` → source = the URL, intent = `what's their pricing model?`.
 The intent is the lens the TL;DR, entities and concepts get written through — a
 page read for "pricing tactics" should produce a different report than the same

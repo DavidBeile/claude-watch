@@ -164,15 +164,19 @@ Other knobs (passed to `scripts/watch.py`):
 - `--no-whisper` — disable transcription entirely; frames only.
 - `--out-dir DIR` — keep working files somewhere specific (default: auto-generated tmp dir).
 
-## `/read` — the same thing for web pages
+## `/watch:read` — the same thing for web pages
 
 Video is one input Claude doesn't have out of the box. A web page that renders
-client-side is another. `/read` closes that gap with the same pipeline:
+client-side is another. `/watch:read` closes that gap with the same pipeline:
 
 ```
-/read https://example.com/pricing what's their per-seat model?
-/read https://blog.example.com/post summarize this for the vault
+/watch:read https://example.com/pricing what's their per-seat model?
+/watch:read https://blog.example.com/post summarize this for the vault
 ```
+
+The `watch:` prefix is Claude Code namespacing plugin commands by plugin name —
+the file is `commands/read.md`, but you invoke it as `/watch:read`. `/watch`
+itself stays unprefixed because its filename matches the plugin name.
 
 It fetches through the **Scrapling MCP server**, extracts text, headings and
 links, and emits a `report.md` with the same schema `/watch` uses — TL;DR, key
@@ -192,10 +196,10 @@ claude mcp add --scope user ScraplingServer -- "$HOME/.venvs/scrapling/bin/scrap
 
 MCP servers load at startup, so restart Claude Code fully after adding it —
 `--continue` re-attaches to the same process and won't pick it up. If no
-Scrapling tools are present, `/read` says so and stops rather than falling back
+Scrapling tools are present, `/watch:read` says so and stops rather than falling back
 to `curl` and reporting on raw HTML.
 
-`/read` is Claude Code only — `commands/` isn't part of the `.skill` bundle.
+`/watch:read` is Claude Code only — `commands/` isn't part of the `.skill` bundle.
 
 **What it won't do:** no logins, no cookies, no paywall or login-wall bypass. It
 fetches the one URL you name and doesn't follow links off it. Fetched page text
@@ -221,7 +225,7 @@ something gets reported to you, not obeyed.
 │   ├── pacing.py            # editorial metrics — cuts/min, shot length, motion
 │   ├── hook.py              # 0-10s microscope (dense frames + word-level Whisper)
 │   ├── report.py            # structured report.md emitter (video)
-│   ├── article.py           # structured report.md emitter (web page, used by /read)
+│   ├── article.py           # structured report.md emitter (web page, used by /watch:read)
 │   ├── transcribe.py        # VTT parsing + dedupe + Whisper orchestration
 │   ├── whisper.py           # Groq / OpenAI clients (pure stdlib)
 │   ├── setup.py             # preflight + installer
@@ -229,7 +233,7 @@ something gets reported to you, not obeyed.
 │   └── build-skill.sh       # build dist/watch.skill for claude.ai upload
 ├── commands/                # slash commands (Claude Code only — not in .skill)
 │   ├── watch.md             # /watch — delegates to SKILL.md
-│   └── read.md              # /read — web pages via the Scrapling MCP server
+│   └── read.md              # /watch:read — web pages via the Scrapling MCP server
 ├── hooks/                   # SessionStart status hook (Claude Code only)
 ├── .claude-plugin/          # plugin.json + marketplace.json (Claude Code)
 ├── .codex-plugin/           # codex packaging
