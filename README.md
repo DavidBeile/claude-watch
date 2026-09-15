@@ -164,6 +164,44 @@ Other knobs (passed to `scripts/watch.py`):
 - `--no-whisper` — disable transcription entirely; frames only.
 - `--out-dir DIR` — keep working files somewhere specific (default: auto-generated tmp dir).
 
+## `/read` — the same thing for web pages
+
+Video is one input Claude doesn't have out of the box. A web page that renders
+client-side is another. `/read` closes that gap with the same pipeline:
+
+```
+/read https://example.com/pricing what's their per-seat model?
+/read https://blog.example.com/post summarize this for the vault
+```
+
+It fetches through the **Scrapling MCP server**, extracts text, headings and
+links, and emits a `report.md` with the same schema `/watch` uses — TL;DR, key
+points, entities, concepts — so a watched video and a read article ingest into
+your vault as the same kind of artifact. Articles stage into `raw/read/<slug>/`
+alongside `raw/watched/<slug>/`.
+
+The browser dependency deliberately lives outside this plugin. Scrapling is the
+user's own install, added once and shared by every project:
+
+```bash
+python3 -m venv ~/.venvs/scrapling
+~/.venvs/scrapling/bin/pip install "scrapling[ai]"
+~/.venvs/scrapling/bin/scrapling install     # one-time browser download
+claude mcp add --scope user ScraplingServer -- "$HOME/.venvs/scrapling/bin/scrapling-mcp"
+```
+
+MCP servers load at startup, so restart Claude Code fully after adding it —
+`--continue` re-attaches to the same process and won't pick it up. If no
+Scrapling tools are present, `/read` says so and stops rather than falling back
+to `curl` and reporting on raw HTML.
+
+`/read` is Claude Code only — `commands/` isn't part of the `.skill` bundle.
+
+**What it won't do:** no logins, no cookies, no paywall or login-wall bypass. It
+fetches the one URL you name and doesn't follow links off it. Fetched page text
+is treated as data, never as instructions — a page telling Claude to run
+something gets reported to you, not obeyed.
+
 ## Limits
 
 - **Best accuracy: under 10 minutes.** Past that the script prints a "sparse scan" warning — re-run focused on the part you actually care about with `--start`/`--end`.
@@ -179,11 +217,19 @@ Other knobs (passed to `scripts/watch.py`):
 ├── scripts/
 │   ├── watch.py             # entry point — orchestrates download → frames → transcript
 │   ├── download.py          # yt-dlp wrapper
-│   ├── frames.py            # ffmpeg frame extraction + auto-fps logic
+│   ├── frames.py            # ffmpeg uniform + scene-change extraction, hero selection
+│   ├── pacing.py            # editorial metrics — cuts/min, shot length, motion
+│   ├── hook.py              # 0-10s microscope (dense frames + word-level Whisper)
+│   ├── report.py            # structured report.md emitter (video)
+│   ├── article.py           # structured report.md emitter (web page, used by /read)
 │   ├── transcribe.py        # VTT parsing + dedupe + Whisper orchestration
 │   ├── whisper.py           # Groq / OpenAI clients (pure stdlib)
 │   ├── setup.py             # preflight + installer
+│   ├── tests/               # stdlib unittest suite — no pytest dependency
 │   └── build-skill.sh       # build dist/watch.skill for claude.ai upload
+├── commands/                # slash commands (Claude Code only — not in .skill)
+│   ├── watch.md             # /watch — delegates to SKILL.md
+│   └── read.md              # /read — web pages via the Scrapling MCP server
 ├── hooks/                   # SessionStart status hook (Claude Code only)
 ├── .claude-plugin/          # plugin.json + marketplace.json (Claude Code)
 ├── .codex-plugin/           # codex packaging

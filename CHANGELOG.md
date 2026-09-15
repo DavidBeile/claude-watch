@@ -2,6 +2,21 @@
 
 All notable changes to `/watch` are documented here.
 
+## [Unreleased]
+
+### Added
+- **`/read` — web pages through the `/watch` pipeline.** New slash command in `commands/read.md`. Fetching is delegated to the user's own [Scrapling](https://scrapling.readthedocs.io/) MCP server (`claude mcp add --scope user ScraplingServer`), so the browser dependency stays out of this plugin and is shared across all their projects. Escalates plain HTTP → dynamic browser → stealth, one step at a time, and stops at the first mode that returns real content.
+- `scripts/article.py` — the text counterpart to `report.py`. Same ingest-shaped schema (TL;DR, entities, concepts) so a watched video and a read article land in the vault as the same kind of artifact; anchored on the heading outline and word count where a video report is anchored on timestamps and pacing. Carries fetch provenance in the frontmatter (`fetch_mode`, `selector`, `http_status`, `truncated`) and renders a warning banner on a partial fetch.
+- 15 unit tests in `scripts/tests/test_article.py` — covers the report schema, reading-time math, outline indentation, YAML-scalar quoting, and the degraded paths (empty text, missing metadata, truncated fetch, malformed links).
+
+### Changed
+- Articles stage into `$VAULT_DIR/raw/read/<slug>/`, parallel to `raw/watched/<slug>/`. Vault resolution, slug derivation, the `obsidian://` open and the Step 4.5 ingest gate are reused from `SKILL.md` rather than duplicated.
+- README: documented `/read` and its setup; refreshed the Structure tree, which had drifted — it was missing `pacing.py`, `hook.py`, `report.py`, `commands/` and `scripts/tests/`.
+
+### Security
+- `/read` treats fetched page content as data, never as instructions, and says so explicitly in both the command contract and the README. A page carrying text addressed at an assistant is reported to the user, not acted on. The Scrapling MCP's own instruction filter is documented as a seatbelt, not a substitute for reading carefully.
+- No credential path: `/read` does not log in, send cookies, submit forms, or bypass paywalls and login walls, and it fetches only the URL the user named without following links off it.
+
 ## [0.2.0] — 2026-05-25
 
 Based on [bradautomates/claude-video](https://github.com/bradautomates/claude-video) v0.1.3 by Bradley Bonanno (MIT). Its pipeline (yt-dlp + ffmpeg + Whisper) is preserved; everything below is additive.
