@@ -1,0 +1,10 @@
+{
+  "channel": "Kanalname",
+  "views": 0,
+  "hook_type": "question | number | contrarian | conflict | visual | other",
+  "first_words": "Die tatsaechlich ersten gesprochenen Worte.",
+  "material_tier": "A | B | C | D",
+  "text_density": "none | low | medium | high",
+  "ending": "loop | cliffhanger | hard_cut | cta",
+  "notes": "Freitext: was faellt auf?"
+}

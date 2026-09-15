@@ -99,13 +99,41 @@ nämlich mit dem Argument "Englisch hat mehr Zuschauer und höheren RPM".
 4. **Der München-Faktor** (siehe unten) ist ein deutsches Thema. Auf Englisch
    ist es eine Randnotiz, auf Deutsch ist es *das* Saison-Thema.
 
-**Empfehlung: Deutsch.** Der RPM-Nachteil ist real, aber in der Aufbauphase
-irrelevant — bei 5.000 Abonnenten entscheidet nicht der RPM, sondern ob der
-Kanal überhaupt wächst. Englisch bleibt als späterer Zweitkanal offen.
+**Meine Empfehlung war Deutsch.** Der RPM-Nachteil wäre real, aber in der
+Aufbauphase irrelevant — bei 5.000 Abonnenten entscheidet nicht der RPM,
+sondern ob der Kanal überhaupt wächst.
+
+> ### ✅ Entschieden: Englisch
+>
+> Die Analyse oben bleibt stehen, weil sie dokumentiert, warum die Wahl knapp
+> war. Gearbeitet wird auf Englisch. Daraus folgen drei Anpassungen, die den
+> Rest des Playbooks prägen:
+>
+> 1. **Differenzierung über Substanz, nicht über Tempo.** Im englischsprachigen
+>    Markt ist jede Nachricht binnen Minuten von hundert Kanälen abgedeckt,
+>    viele davon mit Lizenzzugang. Ein Schnelligkeitsrennen ist nicht zu
+>    gewinnen. Gewinnbar ist die bessere Erklärung, der schärfere Blickwinkel,
+>    das Format, das es so nicht gibt.
+> 2. **Enge Nische statt breitem NFL-Kanal.** "NFL content" ist auf Englisch
+>    keine Positionierung. "Film breakdown für Leute, die gerade erst
+>    anfangen" oder "Scheme-Analyse in 30 Sekunden" schon. Die
+>    Wettbewerbsanalyse in [`analysis/`](analysis/README.md) soll genau diese
+>    Lücke finden.
+> 3. **Der Hook muss härter sitzen.** Muttersprachler-Konkurrenz heißt: Die
+>    ersten zwei Sekunden werden gegen Leute gemessen, für die Timing und
+>    Pointe kostenlos sind. Das ist mit Struktur kompensierbar — Zahl zuerst,
+>    Behauptung zuerst, Konflikt zuerst — aber es ist Arbeit, kein Zufall.
 
 ---
 
-## 3. Der München-Faktor — das Zeitfenster dieser Saison
+## 3. Der München-Faktor — ein Nebenthema mit Substanz
+
+> **Einordnung nach der Sprachentscheidung:** Für einen deutschsprachigen Kanal
+> wäre München das Saison-Thema gewesen. Für einen englischsprachigen ist es
+> ein gut bespielbarer International-Series-Block — kein Kern, aber auch nicht
+> zu streichen: Die St.-Brown-Geschichte funktioniert international, und das
+> Feld ist dort dünner besetzt als bei Spieltagsanalysen. Produziert wird
+> **aus der Ferne**; eigenes Stadionmaterial entfällt.
 
 **Sonntag, 15. November 2026, 15:30 Uhr MEZ, Allianz Arena:
 New England Patriots vs. Detroit Lions.**
@@ -120,9 +148,11 @@ Warum das mehr ist als ein Spiel im Kalender:
   (2025: 117 Receptions, 1.401 Yards, 11 Touchdowns). Für ihn ist das Spiel eine
   Heimkehr, und er hat das öffentlich genau so eingeordnet.
 
-Ein deutschsprachiger NFL-Kanal hat damit eine Personalisierungs-Achse, die
-kein US-Kanal so bespielen kann: ein Weltklasse-Spieler, der in *deiner* Sprache
-über *dein* Land spricht.
+Auf Englisch ist das kein Heimvorteil mehr, aber weiterhin eine gute
+Geschichte — und du kennst den Kontext, über den US-Kanäle nur referieren
+können: was dieses Spiel in Deutschland tatsächlich bedeutet, wie die Liga
+dort wahrgenommen wird, warum die Fanbase so schnell gewachsen ist. Das ist
+Format 5 (*The Outsider Take*) an seinem stärksten Punkt.
 
 ### Der Vorlauf
 
@@ -136,21 +166,24 @@ Grober Fahrplan:
 |---|---|
 | Week 2–5 (Sept) | Format finden, 3–4 Varianten testen, Hook-Handwerk lernen |
 | Week 6–9 (Okt) | Auf die 1–2 funktionierenden Formate verdichten, Frequenz hoch |
-| Week 10–11 (Nov) | München-Ramp-up: St.-Brown-Story, Preview, ggf. vor Ort |
-| ab Week 12 | Ernte: Neuzuschauer aus dem München-Peak binden |
+| Week 10–11 (Nov) | München-Block: St.-Brown-Story, International-Series-Einordnung |
+| ab Week 12 | Verdichten auf die Gewinnerformate, Richtung Playoffs |
 | Jan/Feb | Playoffs + Super Bowl — zweiter Peak, dann bereits mit Basis |
 
-### Vor Ort filmen
+### Aus der Ferne — was trotzdem geht
 
-Falls München besucht wird: **Eigenes Material gehört zu 100 % dir.** Stadion-
-atmosphäre, Fans, Tailgate, Stadt, Anreise, Stimmen — rechtlich vollständig
-sauber, kein Content ID, volle Monetarisierung. Das ist der einzige Weg, in
-diesem Markt hochwertiges NFL-Bewegtbild ohne Lizenz zu besitzen.
+Kein Stadionmaterial, also kein eigenes Bewegtbild vom Spiel. Was bleibt, ist
+trotzdem ausreichend für einen November-Block, und es ist vollständig Stufe A:
 
-Einschränkung: Stadion-AGB begrenzen typischerweise die kommerzielle Verwertung
-und längere Aufnahmen des Spielgeschehens selbst. Umfeld, Atmosphäre und
-eigene Person sind davon in der Praxis nicht betroffen — das Spielfeld über
-Minuten abzufilmen dagegen schon.
+- **Die St.-Brown-Geschichte**, erzählt über lizenzierte Standbilder, eigene
+  Grafiken und Zahlen. Auf Englisch der stärkste Winkel: ein Pro-Bowl-Receiver,
+  der in dem Land spielt, dessen Sprache er fließend spricht.
+- **International-Series-Einordnung** — warum die NFL nach Europa geht, was das
+  Spiel für die Liga bedeutet, Historie der Deutschland-Spiele seit 2022.
+- **Preview und Nachbereitung** als reguläre Analyseformate.
+
+Der Verzicht auf die Reise kostet den exklusiven Materialvorteil. Er kostet
+nicht das Thema.
 
 ---
 
@@ -196,5 +229,8 @@ Damit die Zahlen nicht später enttäuschen:
 - Die optimale Shorts-Länge liegt aktuell bei etwa **15–35 Sekunden**.
 - Die ersten 10–15 Uploads sind Lernmaterial, keine Performance-Indikatoren.
 - Ein Kanal, der im September startet, hat in dieser Saison realistisch **zwei**
-  große Chancen: München (November) und die Playoffs/Super Bowl (Januar/Februar).
+  große Chancen: den November-Block und die Playoffs/Super Bowl
+  (Januar/Februar). Auf Englisch ist der zweite deutlich der wichtigere.
   Alles dazwischen ist Handwerk und Frequenz.
+- Im englischsprachigen Markt dauert die Aufbauphase länger als im deutschen.
+  Das ist der Preis der Entscheidung und kein Zeichen, dass etwas falsch läuft.

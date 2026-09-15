@@ -6,6 +6,9 @@ Jedes mit Hook-Muster, Aufwand und Wiederholbarkeit.
 **Legende Rechtestufe:** 🟢 A = kein fremdes Material · 🟡 B = lizenziert ·
 🟠 C = transformativ, Claim möglich
 
+Kanalsprache ist **Englisch** — die Beispiel-Hooks stehen deshalb in der
+Produktionssprache, die Erläuterungen auf Deutsch.
+
 ---
 
 ## Teil 1 — Die Trägerformate (🟢 Stufe A)
@@ -19,8 +22,8 @@ wiederholbar.
 
 Ein Regel- oder Taktikbegriff, in 30 Sekunden erklärt, mit eigener Animation
 (Figma/Canva/After Effects, notfalls Keynote-Magic-Move).
-*Play Action · Cover 2 · Pass Interference · Blitz · Play Clock · RPO ·
-Icing the Kicker · Hurry-Up Offense*
+*Play action · Cover 2 · pass interference · blitz · play clock · RPO ·
+icing the kicker · hurry-up offense*
 
 Warum das funktioniert: Es ist das Format mit der größten strukturellen
 Nachfrage im deutschen Markt und **null** Materialproblem. Zusätzlich
@@ -28,15 +31,15 @@ evergreen — es bringt zwei Jahre später noch Suchtraffic, anders als jedes
 Spieltags-Format.
 
 **Hook-Muster:** Wissenslücke direkt adressieren.
-> "Du schaust seit drei Jahren NFL und weißt immer noch nicht, was ein Blitz ist?
-> 30 Sekunden."
+> "You've watched football for three years and still don't know what a blitz is.
+> Thirty seconds."
 
 **Skalierung:** Eine Begriffsliste mit 80 Einträgen anlegen = 80 Shorts
 Vorrat, unabhängig vom Spielplan. Das ist die Reserve für Wochen ohne Story.
 
 ---
 
-### 2. Zahl der Woche — Datenvisualisierung
+### 2. Number of the Week — Datenvisualisierung
 
 **Rechtestufe:** 🟢 A · **Aufwand:** mittel · **Frequenz:** wöchentlich
 
@@ -44,8 +47,8 @@ Eine Statistik, die eine Geschichte erzählt, als animierte Grafik. Statistiken
 sind nicht schutzfähig — nur fremde Grafiken wären es. Eigene Visualisierung =
 eigenes Werk.
 
-> "Die Lions haben in dieser Saison 71 % ihrer Third Downs konvertiert.
-> Der Ligadurchschnitt liegt bei 39. Das ist kein Lauf, das ist ein System."
+> "The Lions are converting 71% of their third downs. League average is 39.
+> That's not a hot streak. That's a system."
 
 **Hook-Muster:** Zahl zuerst, Kontext danach. Die Zahl steht in Sekunde 0
 groß im Bild, bevor das erste Wort fällt.
@@ -68,8 +71,8 @@ Sieht aus wie Film Study bei den Profis. Ist aber Stufe A: lizenziertes
 Standbild plus eigene Zeichnung.
 
 **Hook-Muster:** Auf ein Detail zeigen, das man ohne Hilfe übersieht.
-> "Schau auf den Safety. Bevor der Ball geworfen wird, hat er den Touchdown
-> schon verschenkt."
+> "Watch the safety. Before the ball is even thrown, he's already given up
+> the touchdown."
 
 ---
 
@@ -82,53 +85,62 @@ EA erlaubt Creatorn über seine Content-Policy grundsätzlich die monetarisierte
 Nutzung von Gameplay — die jeweils aktuelle Fassung vor dem Rollout prüfen.
 
 Zweitverwertung desselben Setups: das **Was-wäre-wenn**.
-> "Was, wenn die Patriots in der vierten Viertelstunde aufs Field Goal
-> verzichtet hätten? Ich hab's durchgespielt."
+> "What if the Patriots had gone for it instead of kicking? I ran it."
 
 **Warum stark:** Löst das Bewegtbild-Problem vollständig, ohne wie ein Kompromiss
 auszusehen. Gameplay ist in der Football-Community akzeptierte Bildsprache.
 
 ---
 
-### 5. Der Deutschland-Blick
+### 5. The Outsider Take — die Nicht-US-Perspektive
 
 **Rechtestufe:** 🟢 A · **Aufwand:** niedrig · **Frequenz:** wöchentlich
 
-Talking Head, eigene Meinung, deutsche Perspektive. Das Format, das ein US-Kanal
-strukturell nicht kopieren kann.
+Talking Head, eigene Meinung — aber mit dem einen Blickwinkel, den die
+US-Konkurrenz strukturell nicht hat: NFL von außerhalb der USA.
 
-Themen: deutsche Spieler in der NFL, Amon-Ra St. Brown auf Deutsch, die
-RTL-Übertragung und ihre Eigenheiten, Anstoßzeiten für deutsche Zuschauer,
-"Warum um 2:30 Uhr aufstehen sich lohnt", NFL vs. Bundesliga-Kultur.
+Der englischsprachige NFL-Markt besteht fast vollständig aus amerikanischen
+Stimmen für amerikanische Zuschauer. Die internationale Fanbase wächst schnell
+und wird inhaltlich kaum bedient. Genau das ist die Lücke: nicht "ein Deutscher
+erklärt die NFL", sondern **die NFL erklärt für alle, die nicht damit
+aufgewachsen sind**.
 
-**Hook-Muster:** Geteilte Erfahrung.
-> "Es ist 3 Uhr nachts, du sitzt allein vorm Fernseher und niemand in deinem
-> Umfeld versteht warum. Willkommen."
+Themen: was an der NFL von außen absurd wirkt und warum es Sinn ergibt,
+Zeitzonen-Realität ("watching at 3am so you don't have to"), wie sich die Liga
+international vermarktet, europäische Spieler in der NFL, Vergleiche zu
+Fußball-Strukturen (Auf-/Abstieg vs. Draft, Salary Cap vs. Transfermarkt).
 
----
+**Hook-Muster:** Geteilte Erfahrung einer unterrepräsentierten Gruppe.
+> "I watch every game at 3am from Europe. Here's what American fans keep
+> getting wrong about this team."
 
-### 6. München-Block (15. November)
+**Warum das trägt:** Es ist das einzige Format in dieser Liste, das sich aus
+deiner Position ergibt statt aus Recherche — und damit das einzige, das ein
+US-Kanal nicht einfach nachbauen kann.
 
-**Rechtestufe:** 🟢 A · **Aufwand:** hoch · **Zeitfenster:** einmalig
+### 6. November-Block: International Series
 
-Falls vor Ort: Alles, was du selbst filmst, gehört dir zu 100 %. Kein Content
-ID, volle Monetarisierung, und niemand sonst hat dieses Material.
+**Rechtestufe:** 🟢 A · **Aufwand:** mittel · **Zeitfenster:** Anfang bis
+Mitte November
 
-Serie über zwei Wochen:
-- Anreise und Vorfreude, Stadt im NFL-Modus
-- Tailgate und Fanszene, Interviews mit Fans
-- Stadionatmosphäre, Einlauf, Stimmung
-- "Zum ersten Mal NFL live" — Reaktionsformat mit echten Menschen
-- Nachbereitung, Rückreise, Fazit
+Produktion aus der Ferne — kein eigenes Stadionmaterial, aber ein Thema, das im
+englischsprachigen Feld dünner besetzt ist als Spieltagsanalysen.
 
-**Wichtig:** Stadion-AGB begrenzen kommerzielle Verwertung und längere
-Aufnahmen des Spielgeschehens. Umfeld, Fans, Atmosphäre, eigene Person sind in
-der Praxis unproblematisch — das Feld minutenlang abzufilmen nicht.
+Am 15. November spielen Patriots und Lions in der Allianz Arena. Der Aufhänger
+ist **Amon-Ra St. Brown**: Mutter aus Leverkusen, fließend Deutsch, doppelte
+Staatsbürgerschaft, vierfacher Pro-Bowler — für ihn ist das Spiel eine
+Heimkehr. Diese Geschichte funktioniert auf Englisch genauso gut, weil sie
+nichts erklärt, sondern erzählt.
 
-**Selbst ohne Reise** ist der November der Peak: St.-Brown-Story, Preview,
-Einordnung, Historie der Deutschland-Spiele seit 2022. Alles Stufe A.
+Serie über zwei Wochen, alles über lizenzierte Standbilder und eigene Grafiken:
 
----
+- Die St.-Brown-Story
+- Warum die NFL nach Europa geht — Marktstrategie, nicht Gastspiel
+- Historie der Deutschland-Spiele seit 2022
+- Preview und Nachbereitung als reguläre Analyse
+
+Verbindet sich gut mit Format 5: Die internationale Perspektive hat hier ihr
+natürliches Thema.
 
 ### 7. Spielerporträt ohne Footage
 
@@ -142,8 +154,8 @@ Deutsch, doppelte Staatsbürgerschaft, vierfacher Pro-Bowler, 2025 mit 117
 Receptions für 1.401 Yards und 11 Touchdowns — und im November in München.
 
 **Hook-Muster:** Die unerwartete Verbindung.
-> "Einer der besten Receiver der NFL spricht besseres Deutsch als die Hälfte
-> meiner Kommentarspalte. Im November spielt er in München."
+> "One of the best receivers in the NFL is fluent in German. In November,
+> he's playing in Munich. This one's personal for him."
 
 ---
 
@@ -154,9 +166,11 @@ Receptions für 1.401 Yards und 11 Touchdowns — und im November in München.
 Reine Information über Grafiken. Start/Sit, Sleeper, Verletzungslage.
 
 **Achtung, separates Thema:** Wettinhalte unterliegen in Deutschland eigenen
-Werbe- und Jugendschutzregeln, und YouTube hat eigene Beschränkungen für
-Glücksspielinhalte. **Fantasy** ist unkritisch, **Wetten** sollten vor dem
-Rollout gesondert geprüft werden. Empfehlung: bei Fantasy bleiben.
+Werbe- und Jugendschutzregeln — die für dich als Uploader gelten, unabhängig
+davon, dass der Kanal englischsprachig ist und überwiegend US-Publikum
+erreicht. Dazu kommen YouTubes eigene Beschränkungen für Glücksspielinhalte.
+**Fantasy** ist unkritisch, **Wetten** sollten vor dem Rollout gesondert
+geprüft werden. Empfehlung: bei Fantasy bleiben.
 
 ---
 
@@ -182,7 +196,7 @@ Entscheidung: Reichweite gegen Shorts-Einnahmen.
 ~20 % fremdes Material), Clip hat Belegfunktion, **Quellenangabe sichtbar im
 Bild**.
 
-### 10. "Was der Kommentator übersehen hat"
+### 10. "What the broadcast missed"
 
 **Rechtestufe:** 🟠 C (stärkste Position innerhalb C) · **Frequenz:** wöchentlich
 
@@ -203,7 +217,7 @@ Belegfunktion des § 51 UrhG. Wenn C, dann so.
 danach. Quelle im Bild.
 
 **Hook-Muster:** Behauptung zuerst, Beweis danach.
-> "Dieser Touchdown war entschieden, bevor der Ball überhaupt gesnapt wurde."
+> "This touchdown was decided before the ball was ever snapped."
 
 ---
 
@@ -214,8 +228,8 @@ danach. Quelle im Bild.
 Eine verbreitete Behauptung aus der Community gegen die Daten stellen. Ohne
 Clip ist es Stufe A, mit kurzem Beleg-Clip Stufe C.
 
-> "Alle sagen, die Defense der Bills sei das Problem. Die Zahlen sagen etwas
-> völlig anderes."
+> "Everyone says the Bills' defense is the problem. The numbers say something
+> completely different."
 
 ---
 
@@ -286,14 +300,25 @@ Kanalebene — und performt ohnehin besser.
 
 Nicht alle 14 Formate parallel. Vier testen, dann verdichten:
 
-| Format | Stufe | Rhythmus |
-|---|---|---|
-| **1** — Football in 30 | 🟢 A | 3× pro Woche |
-| **2** — Zahl der Woche | 🟢 A | 1× pro Woche, fester Tag |
-| **5** — Deutschland-Blick | 🟢 A | 1× pro Woche |
-| **10** — Was der Kommentator übersah | 🟠 C | 1× pro Woche |
+| Format | Stufe | Rhythmus | Rolle |
+|---|---|---|---|
+| **1** — Football in 30 | 🟢 A | 3× pro Woche | Volumen, Suchtraffic, evergreen |
+| **2** — Number of the Week | 🟢 A | 1× pro Woche, fester Tag | Shareability |
+| **5** — The Outsider Take | 🟢 A | 1× pro Woche | Differenzierung |
+| **10** — What the broadcast missed | 🟠 C | 1× pro Woche | Reichweite |
 
-Das sind sechs Shorts pro Woche, drei Rechtestufen-Varianten und vier
-unterschiedliche Templates. Nach vier Wochen zeigen die Daten, welche zwei
-Formate tragen — darauf wird dann verdichtet, rechtzeitig vor dem
-München-Peak.
+Sechs Shorts pro Woche, zwei Rechtestufen, vier unterschiedliche Templates.
+
+Die Zusammenstellung ist bewusst so gewählt: **Format 1** liefert Volumen und
+altert nicht, **Format 2** wird geteilt, **Format 5** ist das einzige, das die
+US-Konkurrenz nicht kopieren kann, und **Format 10** holt Reichweite über
+aktuelles Material — mit einkalkuliertem Claim-Risiko.
+
+Nach vier Wochen zeigen die Daten, welche zwei Formate tragen. Darauf wird
+verdichtet — rechtzeitig vor dem November-Block und mit genug Vorlauf für den
+eigentlichen Peak im Januar.
+
+> **Vor der ersten Produktion:** Die Wettbewerbsanalyse in
+> [`analysis/README.md`](analysis/README.md) durchlaufen. Sie beantwortet, ob
+> die Hook-Typen und Schnittfrequenzen oben in *dieser* Nische tatsächlich
+> stimmen — auf Englisch ist das Feld dicht genug, dass Raten teuer wird.
