@@ -77,7 +77,15 @@ Plattform-Policies ändern sich — vor größeren Entscheidungen neu prüfen.
 - [YouTube API Quota Limits 2026: 10,000 Units, Costs & How to Get More — Phyllo](https://www.getphyllo.com/post/youtube-api-limits-how-to-calculate-api-usage-cost-and-fix-exceeded-api-quota)
 - [YouTube Upload API: Videos & Shorts (2026) — Postproxy](https://postproxy.dev/blog/youtube-upload-api-guide/)
 - [YouTube API Pricing: Complete Guide for 2026 — Blotato](https://www.blotato.com/blog/youtube-api-pricing)
-- [Codex CLI as an MCP Server — Codex Knowledge Base](https://codex.danielvaughan.com/2026/05/18/codex-cli-as-mcp-server-exposing-agent-capabilities-agents-sdk-multi-agent-delegation/)
+- [codex-plugin-cc — GitHub (openai)](https://github.com/openai/codex-plugin-cc) — offizielles Codex-Plugin für Claude Code
+- [From codex mcp-server to App Server and Codex Plugin: v0.149.1 Deprecation — Codex Knowledge Base](https://codex.danielvaughan.com/2026/08/25/codex-mcp-server-deprecated-app-server-migration-claude-code-plugin-v0149/)
+- [Codex App Server — OpenAI Developers](https://developers.openai.com/codex/app-server)
+- [Unlocking the Codex harness: how we built the App Server — OpenAI](https://openai.com/index/unlocking-the-codex-harness/)
+- [Introducing Codex Plugin for Claude Code — OpenAI Developer Community](https://community.openai.com/t/introducing-codex-plugin-for-claude-code/1378186)
+- [Codex CLI as an MCP Server — Codex Knowledge Base](https://codex.danielvaughan.com/2026/05/18/codex-cli-as-mcp-server-exposing-agent-capabilities-agents-sdk-multi-agent-delegation/) — **überholt**, siehe Deprecation oben
+- [YouTube Analytics API: Channel Reports — Google for Developers](https://developers.google.com/youtube/analytics/channel_reports)
+- [Metrics — YouTube Analytics and Reporting APIs](https://developers.google.com/youtube/analytics/metrics)
+- [Connect to MCP servers — Claude Code Docs](https://code.claude.com/docs/en/mcp-quickstart)
 - [Sync Codex and Claude Code configs — OpenAI Developer Community](https://community.openai.com/t/sync-codex-and-claude-code-configs-skills-agents-mcp-permissions/1380517)
 - [Awesome Codex CLI — openai/codex Discussion #16329](https://github.com/openai/codex/discussions/16329)
 - [Codex CLI Guide 2026: Setup, Sandbox, AGENTS.md & MCP](https://blakecrosley.com/guides/codex)

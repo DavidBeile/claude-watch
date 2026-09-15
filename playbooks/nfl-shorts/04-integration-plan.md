@@ -228,57 +228,77 @@ genommen. Ohne gesetzte Credentials tut das Skript nichts.
 
 ## Teil 2 — Claude ↔ Codex
 
-### Was geht
+> **Korrektur gegenüber der ersten Fassung dieses Plans.** Dort stand, Codex
+> lasse sich per `codex mcp-server` als MCP-Server in Claude Code einhängen.
+> Das stimmt nicht mehr: **`codex mcp-server` wurde mit Codex CLI v0.149.1 am
+> 24. August 2026 abgekündigt.** Der Befehl stammte aus der Zeit vor dem Codex
+> **App Server** — einem vollwertigen JSON-RPC-2.0-Daemon, der seit Anfang 2026
+> der maßgebliche Integrationspunkt ist. Für den Weg Claude Code → Codex gibt
+> es inzwischen etwas Besseres als eine MCP-Verdrahtung: ein offizielles Plugin.
 
-Codex CLI kann sich selbst als MCP-Server starten:
+### Der aktuelle Weg: das offizielle OpenAI-Plugin
 
-```bash
-codex mcp-server
+OpenAI pflegt ein Plugin, das Codex direkt in Claude Code verfügbar macht:
+[`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc). Es
+umschließt die lokale Codex-CLI samt App Server und **erbt dabei deine
+vorhandene Authentifizierung, deine `config.toml`, deine MCP-Konfiguration und
+deine Umgebungsvariablen** — es gibt also keine zweite Konfiguration zu pflegen.
+
+**Voraussetzungen:** ChatGPT-Abo (Free genügt) oder OpenAI-API-Key, dazu
+Node.js 18.18 oder neuer.
+
+**Installation**, in Claude Code:
+
+```
+/plugin marketplace add openai/codex-plugin-cc
+/plugin install codex@openai-codex
+/reload-plugins
+/codex:setup
 ```
 
-Das startet einen stdio-basierten JSON-RPC-Server nach MCP-Spezifikation. Jeder
-MCP-fähige Client — Claude Code eingeschlossen — kann damit Coding-Aufgaben an
-Codex delegieren, ohne die CLI zu shellen und Output zu parsen. Codex wird zum
-Baustein in einem größeren Agentensystem statt zu einem separaten Terminal-Tool.
+`/codex:setup` prüft, ob Codex einsatzbereit ist, und installiert es bei Bedarf
+per npm nach. Falls Codex nicht angemeldet ist: `!codex login`.
 
-Registrierung in Claude Code, sinngemäß:
+**Befehle:**
 
-```toml
-[mcp_servers.codex]
-command = "npx"
-args = ["-y", "@openai/codex", "mcp-server"]
-```
+| Befehl | Zweck |
+|---|---|
+| `/codex:review` | Code-Review der uncommitteten Änderungen oder eines Branches |
+| `/codex:adversarial-review` | Review, das Designentscheidungen und Annahmen gezielt angreift |
+| `/codex:rescue` | Aufgabe an Codex delegieren (Debugging, Fixes, Untersuchungen) |
+| `/codex:transfer` | Aus der Claude-Code-Session einen persistenten Codex-Thread erzeugen |
+| `/codex:status` | Laufende und kürzliche Codex-Jobs |
+| `/codex:result` | Ergebnis eines abgeschlossenen Jobs |
+| `/codex:cancel` | Laufenden Hintergrund-Job abbrechen |
 
-Zusätzlich hat Codex CLI 0.147.0 (7. August 2026) Cross-Harness-Interoperabilität
-ergänzt, u. a. den Import von Cursor-Skills. Die Ökosysteme wachsen zusammen.
+### Die Gegenrichtung steht schon
 
-### Umgekehrte Richtung
-
-Geht auch: Dieses Repo hat bereits `.codex-plugin/plugin.json`, und der
-Installationsweg für Codex ist dokumentiert:
+`/watch` in Codex nutzen geht bereits — das Repo hat `.codex-plugin/plugin.json`,
+und der Installationsweg ist dokumentiert:
 
 ```bash
 git clone https://github.com/taoufik123-collab/claude-watch.git ~/.codex/skills/watch
 ```
 
-Codex kann `/watch` also bereits nutzen. Die Brücke steht in eine Richtung
-schon.
+Die Brücke ist also in beide Richtungen offen.
 
-### Wofür das im NFL-Workflow gut ist — ehrlich betrachtet
+### Wofür das in diesem Workflow taugt — ehrlich betrachtet
 
-Die Delegation lohnt sich nicht als Selbstzweck. Sinnvoll ist sie dort, wo
-abgegrenzte, gut spezifizierbare Code-Arbeit anfällt:
+Ein zweiter Agent, der dasselbe tut wie der erste, bringt nichts. Sinnvoll wird
+es dort, wo die Trennung inhaltlich ist:
 
-- Render-Pipeline für die Grafik-Formate (Format 2, 3, 9) — Daten rein,
-  fertiges MP4 raus
-- Batch-Verarbeitung von Thumbnails und Textoverlays
-- Der YouTube-MCP-Server aus Teil 1 selbst
+- **`/codex:adversarial-review` auf `scripts/youtube.py`.** Das ist der
+  naheliegendste erste Einsatz, und zwar aus einem konkreten Grund: Ich habe
+  den OAuth- und HTTP-Pfad geschrieben, konnte ihn hier aber **nicht live
+  testen** — Google ist über den Egress-Proxy dieser Session nicht erreichbar.
+  Getestet ist nur die netzunabhängige Logik. Ein unabhängiges Review genau
+  dieser ungetesteten Stellen ist mehr wert als ein weiteres Feature.
+- **Render-Pipeline für die Grafikformate** (Formate 2, 3, 9): Daten rein,
+  fertiges MP4 raus. Abgegrenzt, gut spezifizierbar — typische Delegationsarbeit.
+- **Batch-Verarbeitung** von Thumbnails und Textoverlays.
 
-Claude behält Recherche, Analyse, Strategie und Skript; Codex bekommt
-umrissene Implementierungsaufgaben. Ein zweiter Agent, der dasselbe tut wie der
-erste, bringt nichts — die Trennung muss inhaltlich sein, nicht nur technisch.
-
----
+Claude behält Recherche, Analyse, Strategie und Skript; Codex bekommt umrissene
+Implementierungs- und Prüfaufgaben.
 
 ## Reihenfolge
 
@@ -289,10 +309,12 @@ Vorschlag, nach Nutzen pro Aufwand:
 | **1** | `/watch`-Wettbewerbsanalyse (Schritt ②) | Braucht **keine** Integration — läuft heute schon. Direkt nutzbar. |
 | ~~**2**~~ | ~~YouTube **Analytics**, nur lesend~~ | ✅ gebaut — `scripts/youtube.py` |
 | **3** | YouTube **Upload** | Erst wenn ein Format steht und Frequenz da ist. Vorher automatisiert man Chaos. |
-| **4** | Codex als MCP-Server | Sobald es echte Render-Arbeit gibt, die sich zu delegieren lohnt. |
+| **4** | Codex-Plugin für Claude Code | Sofort möglich, vier Befehle. Erster Einsatz: adversarial review von `scripts/youtube.py`. |
 
-Schritt 1 ist sofort möglich. Schritt 2 ist der eigentliche Gewinn. Schritt 3
-lohnt erst ab Volumen. Schritt 4 ist Komfort.
+Schritt 1 ist sofort möglich. Schritt 2 ist gebaut. Schritt 3 lohnt erst ab
+Volumen. Schritt 4 ist inzwischen so billig (vier Befehle, kein eigener Code),
+dass die alte Einordnung "Komfort, später" nicht mehr stimmt — es lohnt sich
+jetzt, schon wegen des Reviews.
 
 ---
 
