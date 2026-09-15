@@ -1,43 +1,109 @@
-# Codex ↔ Claude ↔ Vault — der zusammengeführte Weg
+# Codex + Claude optimal verbinden
 
-Zwei Sessions haben diese Frage getrennt beantwortet. Dieses Dokument führt
-beides zusammen und korrigiert, was in beiden veraltet war.
+Vollständige Anleitung. Stand: 15. September 2026.
 
-Stand: 15. September 2026.
+Zusammengeführt aus zwei Sessions dieses Repos und gegen die aktuellen Quellen
+geprüft.
 
 ---
 
-## Was in beiden Sessions falsch war
+## Vorab: warum ältere Tutorials hier schaden
 
-Session *„Codex mit Claude/Vault verbinden"* nannte drei Wege: (a) gemeinsamer
-Vault-/Repo-Ordner, (b) MCP-Bridge, (c) Shell-Exec. Session *„Shorts-Analyse und
-NFL-Format"* nannte `codex mcp-server`.
+Der Standardweg hat sich im August 2026 geändert. Alles, was vor dem
+**24. August 2026** veröffentlicht wurde, zeigt mit hoher Wahrscheinlichkeit
+den abgekündigten Weg.
 
-**Beide lagen bei der MCP-Variante daneben.** `codex mcp-server` wurde mit
-Codex CLI **v0.149.1 am 24. August 2026 abgekündigt**. Der Befehl stammte aus
-der Zeit vor dem Codex **App Server** — einem JSON-RPC-2.0-Daemon, der seit
-Anfang 2026 der maßgebliche Integrationspunkt ist.
+**`codex mcp-server` existiert nicht mehr.** Der Befehl wurde mit Codex CLI
+**v0.149.1** abgekündigt. Er stammte aus der Zeit vor dem Codex **App Server**,
+einem JSON-RPC-2.0-Daemon, der seit Anfang 2026 der maßgebliche
+Integrationspunkt ist.
 
-Für Claude Code gibt es inzwischen einen offiziellen Weg, der besser ist als
-jede der drei Varianten: das Plugin **[`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc)**.
+Wenn eine Anleitung dir eines der folgenden Dinge sagt, ist sie veraltet:
 
-Was aus den drei Wegen bleibt:
-
-| Weg | Stand |
+| Veraltetes Signal | Aktuell |
 |---|---|
-| (a) Gemeinsamer Ordner | ✅ richtig — und der Schlüssel zur Vault-Frage, siehe Teil 2 |
-| (b) MCP-Bridge | ❌ überholt für Claude Code → Plugin nehmen |
-| (c) Shell-Exec | ⚠️ funktioniert, aber das Plugin kapselt genau das sauberer |
+| `codex mcp-server` starten | Plugin `openai/codex-plugin-cc` |
+| Codex per Hand in `.mcp.json` eintragen | Plugin erledigt das |
+| Eigenen Wrapper / Shell-Exec bauen | Plugin kapselt genau das |
 
-Ebenfalls richtig und weiterhin gültig: **Das ChatGPT-Abo überträgt sich
-nicht.** Jeder Agent nutzt sein eigenes Konto. Das Plugin umschließt deine
-*lokale* Codex-CLI und erbt deren Anmeldung — du brauchst also ein
-ChatGPT-Abo (Free genügt) oder einen OpenAI-API-Key, und Codex muss lokal
-angemeldet sein (`codex login`).
+Das gilt ausdrücklich auch für zwei frühere Antworten in diesem Repo — beide
+nannten die MCP-Variante, beide lagen falsch. Diese Datei ist die Korrektur.
 
 ---
 
-## Teil 1 — Codex in Claude Code
+## Was du am Ende hast
+
+Drei Verbindungen, die zusammen mehr sind als ihre Teile:
+
+```
+   ┌──────────────┐   Plugin    ┌──────────────┐
+   │ Claude Code  │ ──────────► │    Codex     │
+   │              │  delegiert  │              │
+   └───────┬──────┘             └──────┬───────┘
+           │                           │
+           │      derselbe Ordner      │
+           └───────────┬───────────────┘
+                       ▼
+              ┌─────────────────┐
+              │  Obsidian-Vault │   CLAUDE.md  ← Claude
+              │   + Repo        │   AGENTS.md  ← Codex
+              └─────────────────┘
+```
+
+1. **Claude → Codex** über das offizielle Plugin (Delegation, Review)
+2. **Beide → derselbe Ordner** (Vault und Repo als gemeinsame Substanz)
+3. **Beide → dieselben Regeln** (`CLAUDE.md` / `AGENTS.md`)
+
+Die dritte ist die, die am häufigsten vergessen wird — und ohne die Codex im
+Vault ohne Anleitung arbeitet.
+
+---
+
+## Voraussetzungen
+
+| Was | Warum |
+|---|---|
+| **Node.js 18.18+** | Plugin-Laufzeit |
+| **ChatGPT-Abo (Free genügt) oder OpenAI-API-Key** | Codex braucht ein eigenes Konto |
+| **Codex CLI, lokal angemeldet** | Das Plugin umschließt deine lokale CLI |
+
+> **Wichtig, und oft falsch verstanden:** Dein Claude-Abo gilt nicht für Codex.
+> Das Plugin startet keine fremde Cloud-Instanz, sondern deine **lokale**
+> Codex-CLI — mit deiner Anmeldung, deiner `config.toml`, deinen
+> Umgebungsvariablen. Zwei Konten, ein Werkzeugkasten.
+
+---
+
+## Schritt 1 — Vault-Pfad festlegen
+
+Zuerst, weil Schritt 3 darauf aufbaut.
+
+`/watch` sucht den Vault in dieser Reihenfolge, erster Treffer gewinnt:
+
+1. `$WATCH_VAULT_DIR`
+2. `~/Second brain`
+3. `~/Documents/Obsidian`
+4. `~/Obsidian`
+
+Liegt dein Vault woanders oder willst du es explizit:
+
+```bash
+echo 'export WATCH_VAULT_DIR="$HOME/Second brain"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**Prüfen:**
+```bash
+echo "$WATCH_VAULT_DIR" && ls "$WATCH_VAULT_DIR"
+```
+Du solltest deine Vault-Ordner sehen. Falls nicht, stimmt der Pfad nicht —
+nicht weitermachen, Schritt 3 hängt daran.
+
+---
+
+## Schritt 2 — Codex-Plugin in Claude Code
+
+In Claude Code:
 
 ```
 /plugin marketplace add openai/codex-plugin-cc
@@ -46,108 +112,163 @@ angemeldet sein (`codex login`).
 /codex:setup
 ```
 
-`/codex:setup` prüft die Installation und installiert Codex bei Bedarf per npm
-nach. Falls nicht angemeldet: `!codex login`.
+`/codex:setup` prüft, ob Codex einsatzbereit ist, und installiert es bei Bedarf
+per npm nach. Es verwaltet außerdem ein optionales Review-Gate.
 
-**Voraussetzungen:** ChatGPT-Abo (Free genügt) oder OpenAI-API-Key, Node.js
-18.18+.
+Falls Codex nicht angemeldet ist:
+```
+!codex login
+```
 
-Das Plugin erbt deine vorhandene Codex-Authentifizierung, deine `config.toml`,
-deine MCP-Konfiguration und deine Umgebungsvariablen — es gibt keine zweite
-Konfiguration zu pflegen.
-
-| Befehl | Zweck |
-|---|---|
-| `/codex:review` | Review der uncommitteten Änderungen |
-| `/codex:adversarial-review` | Review, das Annahmen gezielt angreift |
-| `/codex:rescue` | Aufgabe delegieren |
-| `/codex:transfer` | Persistenten Codex-Thread aus der Session erzeugen |
-| `/codex:status` · `/codex:result` · `/codex:cancel` | Hintergrund-Jobs |
+**Prüfen:** `/codex:status` muss antworten, ohne zu meckern.
 
 ---
 
-## Teil 2 — Der Vault als gemeinsame Substanz
+## Schritt 3 — Codex die Vault-Regeln geben
 
-Hier zahlt sich Weg (a) aus der anderen Session aus, und zwar stärker als es
-klingt.
+Der Baustein, den fast jede Anleitung auslässt.
 
-**Der Vault ist bereits der gemeinsame Ordner.** `/watch` legt jeden Report
-unter `$VAULT_DIR/raw/watched/<slug>/report.md` ab, und `$VAULT_DIR/CLAUDE.md`
-definiert die Ingest-Op. Wenn Codex denselben Ordner sieht, lesen und schreiben
-beide Agenten dieselben Notizen — **ohne Protokoll, ohne Bridge, ohne Daemon.**
-Die Verbindung ist das Dateisystem.
-
-### Vault-Pfad
-
-`/watch` löst ihn in dieser Reihenfolge auf (erster Treffer gewinnt):
-
-1. `$WATCH_VAULT_DIR`
-2. `~/Second brain`
-3. `~/Documents/Obsidian`
-4. `~/Obsidian`
-
-Setzen, falls der Vault woanders liegt:
-
-```bash
-echo 'export WATCH_VAULT_DIR="$HOME/Second brain"' >> ~/.zshrc
-```
-
-### Der eine fehlende Baustein: `AGENTS.md`
-
-Claude liest `CLAUDE.md`. **Codex liest `AGENTS.md`.** Dein Vault hat
-vermutlich nur ersteres — deshalb würde Codex dort ohne Anleitung arbeiten und
-die Ingest-Konventionen nicht kennen.
-
-Die Lösung ist eine Datei. Im Vault-Wurzelverzeichnis:
+**Claude liest `CLAUDE.md`. Codex liest `AGENTS.md`.** Dein Vault hat
+vermutlich nur ersteres. Ohne diesen Schritt arbeitet Codex dort blind und
+kennt deine Ingest-Konventionen nicht.
 
 ```bash
 cd "$WATCH_VAULT_DIR"
 ln -s CLAUDE.md AGENTS.md
 ```
 
-Ein Symlink hält beide automatisch synchron — eine Kopie driftet auseinander,
-sobald du eine der beiden änderst. Falls Codex dem Symlink nicht folgt oder du
-für Codex bewusst andere Regeln willst, liegt unter
-[`templates/vault-AGENTS.md`](templates/vault-AGENTS.md) eine eigenständige
-Vorlage.
+**Warum Symlink und nicht Kopie:** Eine Kopie driftet auseinander, sobald du
+eine der beiden Dateien änderst — und du merkst es erst, wenn Codex nach alten
+Regeln arbeitet. Der Symlink kann das nicht.
 
-### Danach
+Falls Codex dem Symlink nicht folgt oder du für Codex bewusst abweichende
+Regeln willst: eigenständige Vorlage unter
+[`templates/vault-AGENTS.md`](templates/vault-AGENTS.md).
 
+**Dasselbe fürs Repo**, falls du Codex auch hier arbeiten lässt:
 ```bash
-cd "$WATCH_VAULT_DIR"
-codex
+cd /pfad/zu/claude-watch
+ln -s CLAUDE.md AGENTS.md   # nur falls eine CLAUDE.md existiert
 ```
 
-Codex arbeitet dann im selben Vault, nach denselben Regeln, auf denselben
-Reports, die `/watch` dort ablegt.
+**Prüfen:**
+```bash
+cd "$WATCH_VAULT_DIR" && cat AGENTS.md | head -5
+```
 
 ---
 
-## Die Arbeitsteilung, die sich daraus ergibt
+## Schritt 4 — Die Gegenrichtung (optional)
 
-Ein zweiter Agent, der dasselbe tut wie der erste, bringt nichts. Die Trennung
-muss inhaltlich sein:
+`/watch` in Codex nutzen. Das Repo hat `.codex-plugin/plugin.json`, der Weg ist
+vorgesehen:
 
-| | Claude | Codex |
+```bash
+git clone https://github.com/taoufik123-collab/claude-watch.git ~/.codex/skills/watch
+```
+
+Danach ist die Brücke in beide Richtungen offen.
+
+---
+
+## Wofür du was benutzt
+
+Ein zweiter Agent, der dasselbe tut wie der erste, bringt nichts. Der Gewinn
+entsteht nur bei inhaltlicher Trennung.
+
+| | **Claude** | **Codex** |
 |---|---|---|
-| **Stärke hier** | Recherche, Analyse, Strategie, Skripte | abgegrenzte Implementierung, unabhängiges Review |
-| **Im Vault** | `/watch` → Report → Ingest | Aufräumen, Umstrukturieren, Batch-Arbeit an vielen Notizen |
-| **Im Repo** | Features, Architektur | Review, Render-Pipelines, Tooling |
+| **Stärke** | Recherche, Analyse, Strategie, Architektur, Skripte | abgegrenzte Implementierung, unabhängiges Review |
+| **Im Repo** | Features bauen, Entscheidungen treffen | Review, Render-Pipelines, Tooling |
+| **Im Vault** | `/watch` → Report → Ingest | Aufräumen, Umstrukturieren, Batch-Arbeit |
 
-**Erster sinnvoller Einsatz:** `/codex:adversarial-review` auf
-`scripts/youtube.py`. Dessen OAuth- und HTTP-Pfad wurde in einer Cloud-Session
-geschrieben, in der Google über den Egress-Proxy nicht erreichbar war — live
-getestet ist er also nicht. Ein unabhängiges Review genau dieser Stellen ist
-mehr wert als das nächste Feature.
+### Die Befehle
+
+| Befehl | Wofür |
+|---|---|
+| `/codex:review` | Review der uncommitteten Änderungen |
+| `/codex:adversarial-review` | Review, das Designannahmen gezielt angreift |
+| `/codex:rescue` | Aufgabe delegieren (Debugging, Fixes, Untersuchungen) |
+| `/codex:transfer` | Persistenten Codex-Thread aus der Session erzeugen |
+| `/codex:status` | Laufende und kürzliche Jobs |
+| `/codex:result` | Ergebnis eines abgeschlossenen Jobs |
+| `/codex:cancel` | Hintergrund-Job abbrechen |
+
+### Der wertvollste Einsatz
+
+**`/codex:adversarial-review`** — nicht `/codex:review`.
+
+Ein normales Review findet Tippfehler. Das adversarial Review greift
+Designannahmen an, und das ist der Teil, den ein zweites Modell tatsächlich
+besser kann als dasselbe Modell nochmal: Es hat deine Annahmen nicht gemacht.
+
+Konkret hier: `scripts/youtube.py`. Dessen OAuth- und HTTP-Pfad wurde in einer
+Cloud-Session geschrieben, in der Google über den Egress-Proxy nicht erreichbar
+war — live getestet ist er nicht. Genau diese Stellen von einem anderen Modell
+prüfen zu lassen, ist mehr wert als das nächste Feature.
+
+```
+/codex:adversarial-review scripts/youtube.py
+```
 
 ---
 
-## Reihenfolge
+## Fallstricke
 
-1. `WATCH_VAULT_DIR` setzen, falls nötig — Voraussetzung für alles Weitere
-2. `AGENTS.md` im Vault anlegen (Symlink)
-3. Codex-Plugin in Claude Code installieren (Teil 1)
-4. `/codex:adversarial-review` auf `scripts/youtube.py` laufen lassen
+**Nicht beide Agenten gleichzeitig am selben Repo.** Zwei Agenten, die
+gleichzeitig committen oder Branches wechseln, treten sich auf die Füße. Codex
+arbeitet delegiert, also im Hintergrund — `/codex:status` prüfen, bevor du
+selbst weiterschreibst.
 
-Schritte 1–2 dauern zusammen eine Minute und sind die Voraussetzung dafür, dass
-Schritt 3 überhaupt etwas nützt.
+**Das ChatGPT-Abo ist separat.** Siehe Voraussetzungen. Kein Claude-Abo der
+Welt meldet dich bei Codex an.
+
+**Keine blockierten Aufgaben weiterreichen.** Was Claude aus Berechtigungs-
+gründen nicht darf, gehört nicht an Codex delegiert, damit es doch passiert.
+Das hebelt die Entscheidung aus, die du selbst getroffen hast.
+
+**Ältere Tutorials gegenprüfen.** Wenn eine Anleitung `codex mcp-server` sagt,
+ist sie vor dem 24. August 2026 entstanden. Siehe oben.
+
+---
+
+## Reihenfolge in Kurzform
+
+```bash
+# 1  Vault-Pfad
+echo 'export WATCH_VAULT_DIR="$HOME/Second brain"' >> ~/.zshrc && source ~/.zshrc
+
+# 3  Vault-Regeln für Codex
+cd "$WATCH_VAULT_DIR" && ln -s CLAUDE.md AGENTS.md
+```
+
+```
+# 2  Plugin (in Claude Code)
+/plugin marketplace add openai/codex-plugin-cc
+/plugin install codex@openai-codex
+/reload-plugins
+/codex:setup
+
+# 4  Erster echter Einsatz
+/codex:adversarial-review scripts/youtube.py
+```
+
+Schritte 1 und 3 dauern zusammen eine Minute. Ohne sie funktioniert Schritt 2
+zwar, aber Codex ist im Vault blind.
+
+---
+
+## Quellen
+
+- [openai/codex-plugin-cc](https://github.com/openai/codex-plugin-cc) — offizielles Plugin
+- [From codex mcp-server to App Server and Codex Plugin: v0.149.1 Deprecation](https://codex.danielvaughan.com/2026/08/25/codex-mcp-server-deprecated-app-server-migration-claude-code-plugin-v0149/)
+- [Codex App Server — OpenAI Developers](https://developers.openai.com/codex/app-server)
+- [Introducing Codex Plugin for Claude Code — OpenAI Developer Community](https://community.openai.com/t/introducing-codex-plugin-for-claude-code/1378186)
+- Vault-Mechanik: `SKILL.md` in diesem Repo, Abschnitt *Configuration* und Schritte 4.4/4.5
+
+> **Nicht ausgewertet:** [Claude Code + Codex = AI GOD](https://www.youtube.com/watch?v=L7NPhaUBpZE)
+> (31. März 2026). YouTube ist in der Session, in der diese Datei entstand,
+> durch die Egress-Policy gesperrt — das Video wurde **nicht** gesehen. Sein
+> Veröffentlichungsdatum liegt rund fünf Monate vor der Abkündigung von
+> `codex mcp-server`; falls es eine Verdrahtung zeigt, ist sie mit hoher
+> Wahrscheinlichkeit die veraltete. Gegen die Tabelle oben prüfen.
