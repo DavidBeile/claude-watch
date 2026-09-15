@@ -112,10 +112,14 @@ In Claude Code:
 /codex:setup
 ```
 
-`/codex:setup` prüft, ob Codex einsatzbereit ist, und installiert es bei Bedarf
-per npm nach. Es verwaltet außerdem ein optionales Review-Gate.
+Beim `install` fragt Claude Code nach dem **Scope** — `user` wählen, dann steht
+das Plugin in allen Projekten zur Verfügung.
 
-Falls Codex nicht angemeldet ist:
+`/codex:setup` prüft, ob Codex einsatzbereit ist, und installiert es bei Bedarf
+per npm nach („install codex?" → ja). Danach **öffnet sich der Browser** für die
+Anmeldung; am Ende bestätigt Claude Code mit *„Signed in to Codex"*.
+
+Falls die Anmeldung übersprungen wurde:
 ```
 !codex login
 ```
@@ -194,13 +198,46 @@ entsteht nur bei inhaltlicher Trennung.
 | `/codex:result` | Ergebnis eines abgeschlossenen Jobs |
 | `/codex:cancel` | Hintergrund-Job abbrechen |
 
-### Der wertvollste Einsatz
+### Use Case 1 — Usage-Limits ausweichen
+
+Der Weg, den man leicht übersieht: **Opus plant, Codex führt aus.**
+
+```
+/codex:rescue <Aufgabe>
+```
+
+Statt einen teuren Plan *und* die Ausführung über dasselbe Kontingent laufen zu
+lassen, macht Opus die Architektur- und Planungsarbeit und reicht die
+Implementierung an Codex weiter — die gegen dein ChatGPT-Kontingent läuft, nicht
+gegen dein Anthropic-Kontingent. `/codex:rescue` nimmt Flags, u. a. für das
+Effort-Level.
+
+Das ist kein Qualitätskompromiss, sondern eine Aufteilung nach Kostenstelle:
+Planung ist der Teil, bei dem das stärkere Modell zählt; Ausführung eines
+klaren Plans ist der Teil, bei dem Volumen zählt.
+
+### Use Case 2 — Adversarial Review (der wertvollere)
 
 **`/codex:adversarial-review`** — nicht `/codex:review`.
 
-Ein normales Review findet Tippfehler. Das adversarial Review greift
-Designannahmen an, und das ist der Teil, den ein zweites Modell tatsächlich
-besser kann als dasselbe Modell nochmal: Es hat deine Annahmen nicht gemacht.
+Ein normales Review findet Tippfehler. Das adversarial Review baut einen
+strukturierten Angriffs-Prompt über **sieben Flächen** — Auth, Data Loss,
+Rollback, Race Conditions, Null/Timeout, Version Skew, Observability — schickt
+ihn an Codex in einer **read-only Sandbox** und liefert strukturiertes JSON mit
+Severity-Einstufung zurück.
+
+Warum ein zweites Modell und nicht dasselbe nochmal: Es hat deine Annahmen
+nicht gemacht.
+
+> **Es gibt dafür harte Zahlen.** Im Vergleichstest des unten verlinkten Videos
+> — gleiche Codebase, gleicher Prompt — fand Codex **4 High-Severity-Findings**,
+> Opus **7 zusätzliche**, und nur **ein einziges** überlappte. Codex fand drei,
+> die Opus verpasste.
+>
+> Die Lehre ist nicht „Codex ist besser" oder „Opus ist besser", sondern:
+> **die beiden finden verschiedene Dinge.** Wer nur eines laufen lässt, sieht
+> rund die Hälfte. Deshalb ist der Cross-Check der eigentliche Gewinn der
+> Anbindung — nicht der Ersatz des einen durch das andere.
 
 Konkret hier: `scripts/youtube.py`. Der Netzwerkpfad ist inzwischen gegen die
 echten Google-Endpunkte geprüft — Request-Aufbau, Formularkodierung und die
@@ -268,9 +305,17 @@ zwar, aber Codex ist im Vault blind.
 - [Introducing Codex Plugin for Claude Code — OpenAI Developer Community](https://community.openai.com/t/introducing-codex-plugin-for-claude-code/1378186)
 - Vault-Mechanik: `SKILL.md` in diesem Repo, Abschnitt *Configuration* und Schritte 4.4/4.5
 
-> **Nicht ausgewertet:** [Claude Code + Codex = AI GOD](https://www.youtube.com/watch?v=L7NPhaUBpZE)
-> (31. März 2026). YouTube ist in der Session, in der diese Datei entstand,
-> durch die Egress-Policy gesperrt — das Video wurde **nicht** gesehen. Sein
-> Veröffentlichungsdatum liegt rund fünf Monate vor der Abkündigung von
-> `codex mcp-server`; falls es eine Verdrahtung zeigt, ist sie mit hoher
-> Wahrscheinlichkeit die veraltete. Gegen die Tabelle oben prüfen.
+- [Claude Code + Codex = AI GOD](https://www.youtube.com/watch?v=L7NPhaUBpZE) —
+  ausgewertet via `/watch`, Report unter
+  [`playbooks/nfl-shorts/analysis/video-codex-report.md`](../playbooks/nfl-shorts/analysis/video-codex-report.md)
+
+> **Korrektur einer früheren Einschätzung:** Ich hatte vermutet, das Video zeige
+> den abgekündigten `codex mcp-server`-Weg — gestützt auf ein Datum (31. März
+> 2026) aus einer Suchergebnis-Zusammenfassung, das ich nicht prüfen konnte,
+> weil YouTube in dieser Session gesperrt ist. **Die Vermutung war falsch.**
+> Das Video zeigt exakt den aktuellen Weg (`openai/codex-plugin-cc`); das Datum
+> aus der Suche stimmte nicht. Die Wörter `mcp`, `config.toml` und `AGENTS.md`
+> kommen im gesamten Transkript nicht vor.
+>
+> Was das Video **nicht** behandelt: den Vault. Teil 2 dieser Anleitung —
+> gemeinsamer Ordner und `AGENTS.md` — hat dort keine Entsprechung.

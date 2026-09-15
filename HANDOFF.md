@@ -53,8 +53,10 @@ Retention, Codex als zweiter Agent für Review und abgegrenzte Implementierung.
   Google-Cloud-Projekt.
 - **Codex ist nicht verbunden.** Weder das Plugin installiert noch `AGENTS.md`
   im Vault angelegt.
-- **Der `/watch`-Report zum Codex-Video liegt ungelesen im Vault.** Er wurde
-  lokal erzeugt und ingested; die Cloud-Session kommt nicht dran.
+- ~~Der `/watch`-Report zum Codex-Video liegt ungelesen im Vault.~~
+  **Erledigt** — die lokale Session hat ihn nach
+  `playbooks/nfl-shorts/analysis/video-codex-report.md` gepusht, er ist
+  ausgewertet und in `docs/codex-and-vault.md` eingearbeitet.
 - **Kein Short produziert.** Es gibt bisher nur Strategie und Werkzeug.
 
 ### Status
@@ -154,9 +156,17 @@ Sackgassen abläuft.**
   Vorgänger-Session „Codex mit Claude/Vault verbinden" hatte denselben Fehler
   („MCP-Bridge").
   **Lehre:** Bei CLI-Integrationen immer das **Datum der Quelle** prüfen.
-  Richtig ist das offizielle Plugin `openai/codex-plugin-cc`. Das verlinkte
-  YouTube-Video ist vom 31.03.2026 und damit vermutlich ebenfalls veraltet —
-  **noch nicht verifiziert**, weil der Report ungelesen ist.
+  Richtig ist das offizielle Plugin `openai/codex-plugin-cc`.
+
+- **Versucht:** Aus einem Datum in einer Suchergebnis-Zusammenfassung
+  (31.03.2026) zu schließen, das verlinkte YouTube-Video zeige den
+  abgekündigten Weg.
+  **Warum gescheitert:** Das Datum stimmte nicht. Der `/watch`-Report zeigt:
+  Das Video demonstriert exakt den **aktuellen** Weg. `mcp`, `config.toml`
+  und `AGENTS.md` kommen im Transkript nicht ein einziges Mal vor.
+  **Lehre:** Metadaten aus Suchergebnis-Zusammenfassungen sind unzuverlässig.
+  Wenn die Quelle nicht erreichbar ist, ist die richtige Aussage „weiß ich
+  nicht" — nicht eine datumsgestützte Vermutung.
 
 - **Versucht:** Den Verlauf der Session „Codex mit Claude/Vault verbinden"
   (`session_01TuU46vALvLiaeGZ4qo3t8j`) auszulesen.
@@ -206,10 +216,11 @@ python3 playbooks/nfl-shorts/analysis/hookboard.py ~/nfl-analysis -o hookboard.m
 Das ist der Schritt, der die Hook-Empfehlungen im Playbook von Annahmen zu
 Messungen macht — und er ist der Grund, warum lokal gearbeitet wird.
 
-> **Zwei Minuten davor:** Den bereits im Vault liegenden `/watch`-Report zum
-> Codex-Video lesen und gegen `docs/codex-and-vault.md` abgleichen. Die eine
-> Frage: **Zeigt das Video `codex mcp-server`?** Wenn ja, Verdacht bestätigt,
-> Anleitung bleibt. Wenn nein, nachtragen.
+> **Vorarbeit erledigt:** Der Video-Report ist ausgewertet und in
+> `docs/codex-and-vault.md` eingearbeitet (Usage-Arbitrage via
+> `/codex:rescue`, die 7 Angriffsflächen des adversarial review, die
+> Cross-Check-Zahlen). Codex einrichten dauert jetzt ~15 Minuten und kann
+> parallel laufen.
 
 ## 🔗 Kontext-Links
 
