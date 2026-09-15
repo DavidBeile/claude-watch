@@ -4,6 +4,10 @@ All notable changes to `/watch` are documented here.
 
 ## [Unreleased]
 
+### Added
+- `scripts/youtube.py` — read-only YouTube Data + Analytics client for your own channel, pure stdlib. Subcommands: `auth` (OAuth installed-app loopback flow), `videos`, `retention`, `channel`, `traffic`. The point of it is `retention`: it returns the audience-retention curve plus a summary naming the steepest drop-off (in seconds, not just ratios) and the worst `relativeRetentionPerformance` point — the metric that separates "viewers leave here" from "viewers leave here faster than they do on comparable videos". Scopes are `yt-analytics.readonly` and `youtube.readonly` only; it cannot upload, edit or delete. Credentials live in `~/.config/watch/.env`, the refresh token in `~/.config/watch/youtube-token.json` at mode 0600. Inert unless `YOUTUBE_CLIENT_ID` / `YOUTUBE_CLIENT_SECRET` are set.
+- 20 tests in `scripts/tests/test_youtube.py` covering duration parsing, Analytics row shaping, retention summarisation and token-freshness logic.
+
 ### Fixed
 - Hook microscope no longer skips videos under 30 seconds. It previously returned `skipped_reason: "video <30s"` for anything shorter, which meant YouTube Shorts — whose sweet spot is 15-35s — never got a hook analysis at all, exactly where the hook matters most. Short videos now get the word-level Whisper transcript (the half that carries the analysis) while skipping only the 2 fps frame re-pass, since the main pass already samples a short video densely; `analyse_hook()` reuses the main pass's frames inside the hook window instead. The report says which of the two it was. With no Whisper key set there is genuinely nothing to gain on a short video, and the report states that rather than implying a missing feature.
 

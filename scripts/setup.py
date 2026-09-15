@@ -46,6 +46,17 @@ ENV_TEMPLATE = """# /watch API configuration
 
 GROQ_API_KEY=
 OPENAI_API_KEY=
+
+# YouTube analytics (optional) — only needed for scripts/youtube.py, which
+# reads your OWN channel's stats and retention curves. Read-only scopes; it
+# cannot upload, edit or delete. Leave blank and nothing changes.
+#
+# Create at https://console.cloud.google.com -> enable "YouTube Data API v3"
+# and "YouTube Analytics API" -> Credentials -> OAuth client ID -> Desktop app.
+# Then run: python3 scripts/youtube.py auth
+
+YOUTUBE_CLIENT_ID=
+YOUTUBE_CLIENT_SECRET=
 """
 
 

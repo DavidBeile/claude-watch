@@ -1,7 +1,7 @@
 # 04 — Integrationsplan: YouTube ↔ Claude und Claude ↔ Codex
 
-Plan, noch nicht umgesetzt. Du wolltest das "danach" — hier steht, was geht,
-was es kostet und in welcher Reihenfolge es sinnvoll ist.
+Stand: **Schritt 2 (Analytics, nur lesend) ist gebaut** — siehe Abschnitt
+*Eingerichtet* unten. Upload und Codex-Brücke sind weiterhin Plan.
 
 ---
 
@@ -163,6 +163,69 @@ daneben zu stehen.
 
 ---
 
+## Eingerichtet: `scripts/youtube.py`
+
+Der lesende Teil steht. Reine Stdlib, keine Abhängigkeiten, read-only Scopes.
+
+### Einrichtung (einmalig, ~15 Minuten)
+
+1. [console.cloud.google.com](https://console.cloud.google.com) → neues Projekt
+2. Zwei APIs aktivieren: **YouTube Data API v3** und **YouTube Analytics API**
+3. OAuth-Zustimmungsbildschirm → **External** → **Testing**, dich selbst als
+   Testnutzer eintragen. Kein Google-Review nötig, solange nur du das nutzt.
+4. Anmeldedaten → **OAuth-Client-ID** → Anwendungstyp **Desktop-App**
+5. ID und Secret in `~/.config/watch/.env` eintragen:
+   ```
+   YOUTUBE_CLIENT_ID=....apps.googleusercontent.com
+   YOUTUBE_CLIENT_SECRET=...
+   ```
+6. Einmal autorisieren:
+   ```bash
+   python3 scripts/youtube.py auth
+   ```
+   Öffnet den Browser, fängt den Callback auf `127.0.0.1` ab und legt den
+   Refresh-Token unter `~/.config/watch/youtube-token.json` (Modus `0600`) ab.
+
+### Befehle
+
+```bash
+# Die erfolgreichsten eigenen Shorts
+python3 scripts/youtube.py videos --short-form --limit 50
+
+# Retention-Kurve eines Videos — der eigentliche Zweck
+python3 scripts/youtube.py retention <video-id>
+
+# Kanalentwicklung Tag für Tag
+python3 scripts/youtube.py channel --days 90
+
+# Woher die Aufrufe kamen (optional pro Video)
+python3 scripts/youtube.py traffic --days 30 --video-id <video-id>
+```
+
+`retention` liefert neben der Rohkurve eine Zusammenfassung:
+
+- **`steepest_drop`** — wo am meisten Zuschauer abspringen, in **Sekunden**
+  umgerechnet statt nur als Anteil. Bei einem 30-Sekunden-Short ist "Sekunde 3"
+  eine Ansage, "0,1" nicht.
+- **`worst_relative_performance`** — der Punkt mit dem schlechtesten Vergleich
+  zu Videos ähnlicher Länge, plus `below_average` als Flag. Das ist der Wert,
+  der einen Befund von normalem Short-Form-Verhalten unterscheidet.
+
+### Sicherheit
+
+Die Scopes sind `yt-analytics.readonly` und `youtube.readonly` — **kein**
+Upload, kein Bearbeiten, kein Löschen. `youtube.force-ssl` wurde bewusst nicht
+genommen. Ohne gesetzte Credentials tut das Skript nichts.
+
+> **Zu bedenken vor dem nächsten Release:** `scripts/` wird ins
+> `watch.skill`-Bundle und den Plugin-Tarball gepackt. `youtube.py` würde also
+> mit ausgeliefert. Das Skript ist ohne Credentials inert, aber es erweitert
+> den Funktionsumfang des veröffentlichten Plugins um einen OAuth-Client. Falls
+> das nicht gewollt ist: nach `playbooks/` verschieben (dort greift
+> `export-ignore`) oder vor dem Tag entfernen.
+
+---
+
 ## Teil 2 — Claude ↔ Codex
 
 ### Was geht
@@ -224,7 +287,7 @@ Vorschlag, nach Nutzen pro Aufwand:
 | Schritt | Was | Warum zuerst |
 |---|---|---|
 | **1** | `/watch`-Wettbewerbsanalyse (Schritt ②) | Braucht **keine** Integration — läuft heute schon. Direkt nutzbar. |
-| **2** | YouTube **Analytics**, nur lesend | Größter Hebel, kleinstes Risiko. Keine Schreibrechte nötig. |
+| ~~**2**~~ | ~~YouTube **Analytics**, nur lesend~~ | ✅ gebaut — `scripts/youtube.py` |
 | **3** | YouTube **Upload** | Erst wenn ein Format steht und Frequenz da ist. Vorher automatisiert man Chaos. |
 | **4** | Codex als MCP-Server | Sobald es echte Render-Arbeit gibt, die sich zu delegieren lohnt. |
 
