@@ -74,13 +74,17 @@ Hookboard erwartet genau diese Struktur:
 └── ...
 ```
 
-> **Bekannte Einschränkung:** Das Hook-Mikroskop überspringt Videos unter
-> 30 Sekunden (`skipped: video <30s`). Bei Shorts im Zielbereich 15–35 s
-> trifft das die Mehrheit — und damit fällt genau das wortgenaue
-> Whisper-Transkript weg, das die Hook-Analyse wertvoll macht. Der reguläre
-> Durchlauf liefert bei so kurzen Videos zwar ohnehin dichte Frames, aber die
-> Wort-Zeitstempel fehlen. Das Hookboard weist im Abschnitt *Caveat* aus, wie
-> viele Shorts betroffen waren.
+> **Behoben:** Bis September 2026 übersprang das Hook-Mikroskop Videos unter
+> 30 Sekunden — bei Shorts im Zielband 15–35 s also die Mehrheit. Seitdem
+> bekommen kurze Videos das wortgenaue Whisper-Transkript, nur der
+> 2-fps-Frame-Repass entfällt (der reguläre Durchlauf sampelt so kurze Videos
+> ohnehin dicht genug). Im `report.md` steht dann *"Frames: N reused from the
+> main pass"*. Der *Caveat*-Abschnitt des Hookboards sollte bei Shorts-Boards
+> jetzt leer bleiben.
+>
+> Voraussetzung dafür ist ein gesetzter Whisper-Key (`GROQ_API_KEY` oder
+> `OPENAI_API_KEY`). Ohne Key gibt es bei kurzen Videos nichts zu gewinnen —
+> dann weist der Report das explizit aus.
 
 ### Schritt 3 — Codieren
 

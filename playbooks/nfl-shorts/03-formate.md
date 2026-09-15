@@ -96,8 +96,9 @@ auszusehen. Gameplay ist in der Football-Community akzeptierte Bildsprache.
 
 **Rechtestufe:** 🟢 A · **Aufwand:** niedrig · **Frequenz:** wöchentlich
 
-Talking Head, eigene Meinung — aber mit dem einen Blickwinkel, den die
-US-Konkurrenz strukturell nicht hat: NFL von außerhalb der USA.
+Eigene Stimme über eigene Grafiken und lizenzierte Standbilder — kein Gesicht,
+aber eine klar erkennbare Person. Der eine Blickwinkel, den die US-Konkurrenz
+strukturell nicht hat: NFL von außerhalb der USA.
 
 Der englischsprachige NFL-Markt besteht fast vollständig aus amerikanischen
 Stimmen für amerikanische Zuschauer. Die internationale Fanbase wächst schnell
@@ -114,9 +115,16 @@ Fußball-Strukturen (Auf-/Abstieg vs. Draft, Salary Cap vs. Transfermarkt).
 > "I watch every game at 3am from Europe. Here's what American fans keep
 > getting wrong about this team."
 
-**Warum das trägt:** Es ist das einzige Format in dieser Liste, das sich aus
-deiner Position ergibt statt aus Recherche — und damit das einzige, das ein
-US-Kanal nicht einfach nachbauen kann.
+**Warum das trägt, auch ohne Gesicht:** Der Differenzierungsvorteil liegt nicht
+im Gesicht, sondern in der *Position* — und die transportiert die Stimme. Ein
+US-Kanal kann die Grafiken nachbauen, aber nicht den Satz "ich schaue das um
+drei Uhr nachts" ehrlich sagen. Das ist das einzige Format in dieser Liste,
+das sich aus deiner Lage ergibt statt aus Recherche.
+
+**Genau hier ist die AI-Stimme die falsche Entscheidung.** Ein Format, dessen
+ganzer Wert an einer persönlichen Perspektive hängt, mit einer synthetischen
+Stimme zu sprechen, hebt den Vorteil auf — und zwar sowohl beim Zuschauer als
+auch bei der Policy-Bewertung.
 
 ### 6. November-Block: International Series
 
@@ -266,6 +274,51 @@ Single-Format-Kanäle.
 
 ---
 
+## Faceless — Ausführung
+
+Entschieden ist: **faceless**. Das hat eine Spannung, die man bewusst managen
+muss, sonst läuft der Kanal in genau das Problem aus
+[`02-copyright.md`](02-copyright.md), Ebene 3.
+
+### Die Spannung
+
+Faceless drängt zu Templates — gleicher Aufbau, gleiche Grafik, gleiche Stimme,
+weil das schnell und skalierbar ist. Templates in Serie sind aber das Muster,
+das YouTubes "Inauthentic Content"-Policy seit 2026 **auf Kanalebene**
+erkennt. Der bequeme Weg und der gefährliche Weg sind hier derselbe.
+
+### Die Leitplanken
+
+1. **Eigene Stimme, keine AI-Stimme.** Das ist die wichtigste Einzelregel.
+   Faceless heißt kein Gesicht, nicht keine Person. Die eigene Stimme ist
+   gleichzeitig Differenzierung *und* der klarste Nachweis eigener Leistung.
+2. **Mindestens drei sichtbar verschiedene Templates** in Rotation. Nicht
+   dasselbe Layout mit anderem Text — anderer Aufbau, anderes Tempo, andere
+   visuelle Logik. Die vier Startformate sind genau deshalb so gewählt.
+3. **Eigene Meinung im Text.** Ein Short, das nur Fakten referiert, ist
+   austauschbar. Eines mit einer These ist es nicht — und "significant original
+   value" ist exakt das Kriterium der Reused-Content-Policy.
+4. **Keine Fließband-Frequenz.** Sechs gute Shorts pro Woche schlagen zwanzig
+   generische, algorithmisch wie policy-seitig.
+
+### Was faceless erleichtert
+
+Nicht alles daran ist Risiko. Faceless passt sehr gut zu den stärksten
+Stufe-A-Formaten: Telestration (3), Datenvisualisierung (2), Madden-
+Rekonstruktion (4) und Erklärformate (1) brauchen ohnehin kein Gesicht — bei
+ihnen ist der Bildschirm der Star. Die Entscheidung kostet dich vor allem
+Format 5 in seiner stärksten Form, und die bleibt über die Stimme erhalten.
+
+### Wiedererkennbarkeit ohne Gesicht
+
+Was sonst das Gesicht leistet, müssen hier drei Dinge übernehmen:
+
+- **Stimme** — konstant, erkennbar, nicht neutral gesprochen
+- **Visuelle Signatur** — eine Farbe, eine Typo, ein wiederkehrendes
+  Sekunde-0-Element, das über alle drei Templates hinweg gleich bleibt
+- **Haltung** — ein erkennbarer Standpunkt, der über Videos hinweg konsistent
+  ist. Das ist der eigentliche Ersatz fürs Gesicht.
+
 ## Formatmechanik — was für alle gilt
 
 **Länge:** 15–35 Sekunden ist aktuell das Optimum. Länger nur, wenn die
@@ -304,7 +357,7 @@ Nicht alle 14 Formate parallel. Vier testen, dann verdichten:
 |---|---|---|---|
 | **1** — Football in 30 | 🟢 A | 3× pro Woche | Volumen, Suchtraffic, evergreen |
 | **2** — Number of the Week | 🟢 A | 1× pro Woche, fester Tag | Shareability |
-| **5** — The Outsider Take | 🟢 A | 1× pro Woche | Differenzierung |
+| **5** — The Outsider Take | 🟢 A | 1× pro Woche | Differenzierung (eigene Stimme) |
 | **10** — What the broadcast missed | 🟠 C | 1× pro Woche | Reichweite |
 
 Sechs Shorts pro Woche, zwei Rechtestufen, vier unterschiedliche Templates.

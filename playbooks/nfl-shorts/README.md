@@ -63,14 +63,23 @@ Ferne** — eigenes Stadionmaterial entfällt, alles andere bleibt.
 |---|---|
 | **Sprache** | ✅ Englisch |
 | **München vor Ort** | ✅ Nein — Produktion aus der Ferne |
-| **Gesicht oder faceless** | ⬜ offen |
+| **Gesicht oder faceless** | ✅ Faceless |
 
-Zur offenen Frage: Talking-Head bindet stärker und ist rechtlich am saubersten;
-faceless skaliert besser, kollidiert aber härter mit YouTubes "Inauthentic
-Content"-Erkennung auf Kanalebene — und die greift seit 2026 auf **Kanalebene**
-statt pro Video. Für einen englischsprachigen Kanal in einem dichten Feld
-spricht zusätzlich einiges für ein Gesicht: Es ist das einzige Merkmal, das
-sich nicht kopieren lässt.
+**Wichtig zur Faceless-Entscheidung:** Faceless heißt *kein Gesicht* — es heißt
+nicht *keine Person*. Der Unterschied entscheidet über den Kanal:
+
+- **Eigene Stimme, faceless** — unbedenklich. Voiceover über Grafiken,
+  Telestration und Gameplay ist ein etabliertes, voll monetarisierbares Format.
+  Die Persönlichkeit trägt über Stimme, Haltung und Schreibe.
+- **AI-Stimme + gleiches Template + hohe Frequenz** — das ist exakt das Muster,
+  das YouTubes "Inauthentic Content"-Policy adressiert, und die greift seit 2026
+  auf **Kanalebene** statt pro Video. Der Schaden trifft dann nicht ein Short,
+  sondern alles.
+
+Die Empfehlung ist deshalb: **faceless mit eigener Stimme**. Das behält den
+einzigen Differenzierungsvorteil, den ein englischsprachiger Kanal in einem
+dichten Feld hat, und hält gleichzeitig Abstand zur Policy-Grenze. Details in
+[`03-formate.md`](03-formate.md), Abschnitt *Faceless — Ausführung*.
 
 ## Nächster Schritt
 

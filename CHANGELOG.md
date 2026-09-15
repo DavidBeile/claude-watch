@@ -2,6 +2,16 @@
 
 All notable changes to `/watch` are documented here.
 
+## [Unreleased]
+
+### Fixed
+- Hook microscope no longer skips videos under 30 seconds. It previously returned `skipped_reason: "video <30s"` for anything shorter, which meant YouTube Shorts — whose sweet spot is 15-35s — never got a hook analysis at all, exactly where the hook matters most. Short videos now get the word-level Whisper transcript (the half that carries the analysis) while skipping only the 2 fps frame re-pass, since the main pass already samples a short video densely; `analyse_hook()` reuses the main pass's frames inside the hook window instead. The report says which of the two it was. With no Whisper key set there is genuinely nothing to gain on a short video, and the report states that rather than implying a missing feature.
+
+### Changed
+- `analyse_hook()` takes `main_pass_frames` and returns `frames_source` (`"dense-repass"` or `"main-pass"`). The audio slice is now clamped to the video's end, so a 6-second clip no longer asks ffmpeg for 10 seconds of audio.
+- `watch.py` reports a specific hook skip reason (`--no-hook-microscope` or `focused mode`) instead of one string naming all three possible causes.
+- 12 tests added in `scripts/tests/test_hook.py`.
+
 ## [0.2.0] — 2026-05-25
 
 Based on [bradautomates/claude-video](https://github.com/bradautomates/claude-video) v0.1.3 by Bradley Bonanno (MIT). Its pipeline (yt-dlp + ffmpeg + Whisper) is preserved; everything below is additive.

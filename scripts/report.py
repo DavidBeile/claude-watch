@@ -94,7 +94,14 @@ def write_report(
         reason = hook.get("skipped_reason", "n/a")
         lines.append(f"_Skipped: {reason}._")
     else:
-        lines.append(f"- Frames: {len(hook.get('frames', []))} at 2 fps")
+        n_frames = len(hook.get("frames", []))
+        if hook.get("frames_source") == "main-pass":
+            lines.append(
+                f"- Frames: {n_frames} reused from the main pass "
+                f"(video is short enough that it already samples the hook "
+                f"densely; no 2 fps re-pass)")
+        else:
+            lines.append(f"- Frames: {n_frames} at {2} fps")
         words = hook.get("words", [])
         if words:
             lines.append(f"- Word-level transcript ({len(words)} words):")

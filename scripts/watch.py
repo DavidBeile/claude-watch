@@ -166,8 +166,18 @@ def main() -> int:
             motion_scores=motion,
         )
 
-    # Hook microscope: dense pass over [0, 10s] when not in focused mode.
-    if (not args.no_hook_microscope) and (not focused) and full_duration >= 30.0:
+    # Hook microscope over [0, 10s] when not in focused mode. Short videos
+    # reuse the main pass's frames (already dense at that length) but still
+    # get the word-level transcript — that half is what carries the analysis.
+    if args.no_hook_microscope:
+        hook_result = {"frames": [], "words": [], "segments": [], "ran": False,
+                       "frames_source": None,
+                       "skipped_reason": "--no-hook-microscope"}
+    elif focused:
+        hook_result = {"frames": [], "words": [], "segments": [], "ran": False,
+                       "frames_source": None,
+                       "skipped_reason": "focused mode (--start/--end)"}
+    else:
         print("[watch] running hook microscope on first 10s…", file=sys.stderr)
         hook_backend, hook_key = (None, None)
         if not args.no_whisper:
@@ -176,10 +186,8 @@ def main() -> int:
             video_path, work,
             backend=hook_backend, api_key=hook_key,
             full_video_duration=full_duration,
+            main_pass_frames=frames,
         )
-    else:
-        hook_result = {"frames": [], "words": [], "segments": [], "ran": False,
-                       "skipped_reason": "focused mode or short video or --no-hook-microscope"}
 
     transcript_segments: list[dict] = []
     transcript_text: str | None = None
