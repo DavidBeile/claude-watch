@@ -294,12 +294,12 @@ Die Brücke ist also in beide Richtungen offen.
 Ein zweiter Agent, der dasselbe tut wie der erste, bringt nichts. Sinnvoll wird
 es dort, wo die Trennung inhaltlich ist:
 
-- **`/codex:adversarial-review` auf `scripts/youtube.py`.** Das ist der
-  naheliegendste erste Einsatz, und zwar aus einem konkreten Grund: Ich habe
-  den OAuth- und HTTP-Pfad geschrieben, konnte ihn hier aber **nicht live
-  testen** — Google ist über den Egress-Proxy dieser Session nicht erreichbar.
-  Getestet ist nur die netzunabhängige Logik. Ein unabhängiges Review genau
-  dieser ungetesteten Stellen ist mehr wert als ein weiteres Feature.
+- **`/codex:adversarial-review` auf `scripts/youtube.py`.** Der Netzwerkpfad
+  ist gegen die echten Google-Endpunkte geprüft (Request-Aufbau,
+  Formularkodierung, 401/403-Behandlung). Offen bleiben der
+  OAuth-Zustimmungsflow — der braucht Browser und echte Credentials — und das
+  Parsen echter Antwortdaten. Ein unabhängiges Review dieser Stellen ist mehr
+  wert als ein weiteres Feature.
 - **Render-Pipeline für die Grafikformate** (Formate 2, 3, 9): Daten rein,
   fertiges MP4 raus. Abgegrenzt, gut spezifizierbar — typische Delegationsarbeit.
 - **Batch-Verarbeitung** von Thumbnails und Textoverlays.

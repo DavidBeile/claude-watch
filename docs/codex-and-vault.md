@@ -202,10 +202,12 @@ Ein normales Review findet Tippfehler. Das adversarial Review greift
 Designannahmen an, und das ist der Teil, den ein zweites Modell tatsächlich
 besser kann als dasselbe Modell nochmal: Es hat deine Annahmen nicht gemacht.
 
-Konkret hier: `scripts/youtube.py`. Dessen OAuth- und HTTP-Pfad wurde in einer
-Cloud-Session geschrieben, in der Google über den Egress-Proxy nicht erreichbar
-war — live getestet ist er nicht. Genau diese Stellen von einem anderen Modell
-prüfen zu lassen, ist mehr wert als das nächste Feature.
+Konkret hier: `scripts/youtube.py`. Der Netzwerkpfad ist inzwischen gegen die
+echten Google-Endpunkte geprüft — Request-Aufbau, Formularkodierung und die
+401/403-Fehlerbehandlung funktionieren. **Nicht** geprüft sind der
+OAuth-Zustimmungsflow (braucht Browser und echte Credentials) und das Parsen
+echter Antwortdaten. Genau diese Stellen von einem anderen Modell prüfen zu
+lassen, ist mehr wert als das nächste Feature.
 
 ```
 /codex:adversarial-review scripts/youtube.py

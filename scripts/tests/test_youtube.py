@@ -1,8 +1,11 @@
 """Tests for the YouTube analytics client's pure logic.
 
-The OAuth and HTTP paths need a real Google project and are exercised by
-`youtube.py auth` on a real machine; everything testable without a network
-lives here.
+Scope note: the HTTP layer was verified manually against the live Google
+endpoints — request construction, form encoding, and the 401/403 error paths
+all behave. What remains unverified, and cannot be covered here, is the OAuth
+consent flow (needs a browser and real credentials) and parsing of real
+response payloads (needs a valid token). Everything testable without a network
+lives below.
 """
 import sys
 import unittest
