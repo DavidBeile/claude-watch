@@ -58,6 +58,47 @@ Zwei Google-APIs, beide über OAuth 2.0:
 | **YouTube Data API v3** | Upload, Metadaten, Playlists, Kommentare, Suche | Schritt ⑥ |
 | **YouTube Analytics API** | Views, Retention-Kurven, Traffic-Quellen, Demografie | Schritt ③ |
 
+### Was die Analytics API konkret hergibt — verifiziert
+
+Der Kernnutzen steht und fällt damit, ob die Retention-Kurve wirklich abrufbar
+ist. Sie ist es. Der **Audience-Retention-Report** liefert:
+
+| Metrik / Dimension | Bedeutung |
+|---|---|
+| `elapsedVideoTimeRatio` | Dimension: welcher Anteil des Videos verstrichen ist (0–1) |
+| `audienceWatchRatio` | Wie oft dieser Abschnitt gesehen wurde, relativ zu den Gesamtaufrufen |
+| `relativeRetentionPerformance` | Vergleich zu **anderen YouTube-Videos ähnlicher Länge**. Über 0,5 = besser als der Vergleichswert |
+
+`relativeRetentionPerformance` ist der eigentlich wertvolle Wert: Er sagt nicht
+nur "hier springen Leute ab", sondern "hier springen mehr Leute ab als bei
+vergleichbaren Videos". Das erste ist bei Shorts normal, das zweite ist ein
+Befund.
+
+Zwei Einschränkungen, die das Tool-Design bestimmen:
+
+- Der Retention-Report akzeptiert **genau eine Video-ID** — keine
+  komma-separierte Liste. Ein Board über 20 eigene Shorts heißt also 20
+  Aufrufe.
+- `maxResults` muss ≤ 200 sein.
+
+**Wichtig zur Abgrenzung:** Die Analytics API liefert Daten nur für Kanäle, die
+dir gehören. Für fremde Kanäle gibt es über die Data API nur öffentliche Werte
+(Views, Likes, Kommentare) — **keine Retention**. Die Wettbewerbsanalyse in
+[`analysis/`](analysis/README.md) bleibt deshalb auf `/watch` angewiesen; die
+Analytics-Anbindung betrifft ausschließlich die eigenen Videos.
+
+### OAuth-Scopes
+
+| Scope | Wofür | Nötig ab |
+|---|---|---|
+| `https://www.googleapis.com/auth/yt-analytics.readonly` | Reichweite, Retention, Traffic-Quellen | Schritt 2 |
+| `https://www.googleapis.com/auth/youtube.readonly` | Videoliste, Metadaten des eigenen Kanals | Schritt 2 |
+| `https://www.googleapis.com/auth/youtube.upload` | Upload | Schritt 3 |
+| `https://www.googleapis.com/auth/yt-analytics-monetary.readonly` | Umsatzzahlen | optional, später |
+
+Nicht `youtube.force-ssl` nehmen — der Scope gibt Vollzugriff inklusive
+Löschen, und für nichts davon besteht Bedarf.
+
 ### Die Quota-Lage — eine gute Nachricht
 
 Die Quota-Mechanik hat sich 2025/26 grundlegend geändert, und die meisten
@@ -202,5 +243,14 @@ lohnt erst ab Volumen. Schritt 4 ist Komfort.
   über die Technik hinaus — ein Kanal mit WM-Historie hat ein Publikum, das für
   NFL nur teilweise passt, und der Algorithmus braucht dann Zeit zum Umlernen.
   Meine Tendenz: **neuer Kanal**, saubere Themen-Signale.
+
+  **Aber für die Analytics-Anbindung gilt das Gegenteil:** Ein neuer Kanal hat
+  keine Daten, also gibt es in den ersten Wochen nichts zu lesen. Der alte
+  WM-Kanal hat welche — und Hook-Retention ist **sportartunabhängig**. Welcher
+  Hook-Typ deine Zuschauer in Sekunde 2 gehalten hat, ist auf NFL übertragbar,
+  auch wenn das Thema nicht passt. Falls der WM-Kanal noch existiert, ist er
+  damit vom ersten Tag an nutzbares Trainingsmaterial für die Skripte, selbst
+  wenn dort nie wieder etwas hochgeladen wird. Das wäre ein Argument, die
+  Analytics-Anbindung **zuerst auf den alten Kanal** zu richten.
 - **Ablageort für Rohmaterial** — lokal, Cloud, oder im Obsidian-Vault, den
   `/watch` bereits anbinden kann.
