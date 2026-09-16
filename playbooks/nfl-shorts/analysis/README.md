@@ -1,5 +1,9 @@
 # Wettbewerbsanalyse — Protokoll
 
+> ✅ **Einmal durchgeführt am 16.09.2026.** Ergebnisse und was sie an diesem
+> Protokoll widerlegt haben: [`findings.md`](findings.md). Lies das zuerst —
+> drei Annahmen unten sind gemessen falsch und unten entsprechend markiert.
+
 Ziel: nicht raten, welche Hooks funktionieren, sondern es an 15–20 echten
 NFL-Shorts messen. Ergebnis ist ein **Hookboard** — eine Tabelle plus
 Musterauswertung, die zeigt, was die erfolgreichen Shorts anders machen als
@@ -36,16 +40,43 @@ Nicht wahllos. Die Auswahl entscheidet, ob die Auswertung etwas aussagt:
 - **Aktuell.** Nichts älter als ~6 Monate; Shorts-Konventionen drehen schnell.
 - **Verschiedene Kanalgrößen.** Sonst misst man Kanal-Reichweite statt Hook.
 
-Suchstrategie auf YouTube (Filter: Shorts, "Diesen Monat"):
+⚠️ **Die Keyword-Suche funktioniert nicht — gemessen.** Diese sechs Anfragen
+lieferten 282 Videos, davon 53 in Shorts-Länge, und darin Madden-Gameplay,
+Helm-Redesigns und Trainer-Drill-Clips, also drei verschiedene Nischen. Genau
+**ein** Treffer über 100k Views. `#shorts` im Suchtext ist das falsche Werkzeug,
+weil Shorts über den Shorts-Feed ausgespielt werden, nicht über das Hashtag.
 
 ```
+# funktioniert nicht:
 nfl film breakdown    nfl explained    nfl film study
 why <team> <verb>     nfl route concept    nfl all 22
 ```
 
+**Was stattdessen funktioniert — kanalweise über den Shorts-Tab:**
+
+```bash
+yt-dlp --flat-playlist -j "https://www.youtube.com/channel/<id>/shorts"
+```
+
+Vier Aufrufe ergaben 202 echte Shorts mit View-Zahlen. Vorteil darüber hinaus:
+Die View-Spannweite liegt **innerhalb** eines Kanals, damit misst der Vergleich
+den Hook statt der Kanalreichweite.
+
+⚠️ **Zwei Fallstricke des Shorts-Tabs:** Er liefert **kein `duration`**, und der
+Kanal steht nicht unter `channel`, sondern unter **`playlist_channel`**. Die
+`view_count`-Werte sind gerundet („31000"). Wer auf `duration` filtert, bekommt
+eine leere Liste.
+
 Verifizierbare Startpunkte aus der Recherche: der offizielle NFL-Kanal
 (~16,3 Mio. Abonnenten) sowie die namentlich bekannten Creator aus dem NFL
-Access Pass — **Brett Kollman**, **Tom Grossi**, **Peighton Tubre**. Die sind
+Access Pass — **Brett Kollmann** (zwei n), **Tom Grossi**, **Peighton Tubre**.
+
+⚠️ **Nur Kollmann trifft das Zielformat.** Peighton Tubre macht Fan-Reaction und
+Memes vor der Kamera (Top-Video: eine WM-Reaktion), Tom Grossi Spielreaktionen
+als Fan-Persona. Für die Faceless-Film-Analyse sind beide **keine**
+Hook-Referenz. Weitere Kanäle der richtigen Nische: **The QB School**,
+**MatchQuarters**, **Ted Nguyen** — aber alle klein (Median 1,3k–3,5k, Decke
+12k–29k). Die sind
 als Referenz nützlich, aber Vorsicht: Access-Pass-Creator arbeiten mit
 lizenziertem Material (Stufe B) und sind bei der Materialfrage **kein**
 Vorbild für einen Start ohne Lizenz. Für die Hook-Mechanik taugen sie trotzdem.
@@ -59,6 +90,12 @@ Kandidaten in `candidates.md` eintragen (Vorlage liegt dort).
   Hook-Analyse: womit öffnet das Video, was steht im Bild während der
   ersten Worte, wie ist das Pacing?
 ```
+
+⚠️ **Beim Batch `</dev/null` hinter den Aufruf setzen.** In einer
+`while read`-Schleife liest `watch.py` sonst vom selben stdin und frisst Zeichen
+weg: drei Video-IDs verloren ihr erstes Zeichen (`gYjncbJ8Jgg` → `YjncbJ8Jgg`
+→ 404) und eine vierte Zeile wurde still verschluckt — der Lauf zählte 27 statt
+28 und meldete trotzdem Erfolg.
 
 Wichtig: `--out-dir` pro Short auf ein **eigenes** Verzeichnis setzen. Das
 Hookboard erwartet genau diese Struktur:
@@ -83,7 +120,9 @@ Hookboard erwartet genau diese Struktur:
 > jetzt leer bleiben.
 >
 > Voraussetzung dafür ist ein gesetzter Whisper-Key (`GROQ_API_KEY` oder
-> `OPENAI_API_KEY`). Ohne Key gibt es bei kurzen Videos nichts zu gewinnen —
+> `OPENAI_API_KEY`). ⚠️ Der Key wird in dieser Reihenfolge gesucht: Umgebung →
+> `~/.config/watch/.env` → `./.env`. Wer nur `echo $GROQ_API_KEY` prüft, hält
+> ihn fälschlich für fehlend. Ohne Key gibt es bei kurzen Videos nichts zu gewinnen —
 > dann weist der Report das explizit aus.
 
 ### Schritt 3 — Codieren
@@ -107,7 +146,7 @@ entscheiden muss, kommt in `coding.json` pro Short:
 | Feld | Werte | Bedeutung |
 |---|---|---|
 | `views` | Zahl | **Der wichtigste Wert.** Ohne ihn kann das Board Gewinner nicht von Verlierern trennen. |
-| `hook_type` | `question` `number` `contrarian` `conflict` `visual` `other` | Muster der ersten zwei Sekunden |
+| `hook_type` | `superlative-play` `question` `number` `contrarian` `conflict` `visual` `other` | Muster der ersten zwei Sekunden. ⚠️ `superlative-play` wurde nach der ersten Runde ergänzt — es ist das einzige Muster, das Gewinner von Verlierern trennt (Faktor 4,4), fehlte aber im ursprünglichen Vokabular, sodass 18 von 28 auf `other` landeten. |
 | `first_words` | Text | Die tatsächlich ersten gesprochenen Worte |
 | `material_tier` | `A` `B` `C` `D` | Rechtestufe laut [`../02-copyright.md`](../02-copyright.md) |
 | `text_density` | `none` `low` `medium` `high` | Wie viel wird gelesen statt gehört |
@@ -138,9 +177,13 @@ Ab vier codierten `views`-Werten wird er berechnet. Was daraus abzuleiten ist:
 
 - **Hook-Typ-Verteilung oben vs. unten** → welcher Hook-Typ in dieser Nische
   trägt. Das steuert Schritt ④ der Pipeline (Skripterstellung).
-- **Cuts/min oben vs. unten** → ob Schnittfrequenz überhaupt ein Faktor ist.
-  Häufig überschätzt.
-- **Dauer oben vs. unten** → ob das 15–35-s-Band in *dieser* Nische stimmt.
+- ~~**Cuts/min oben vs. unten**~~ → ⚠️ **in dieser Nische nicht messbar.**
+  26 von 28 Reports melden „No scene-change data — likely a static/screen-recorded
+  source" — Broadcast-Footage mit Telestration erzeugt offenbar keine erkennbaren
+  Szenenwechsel. Entweder die Erkennung nachbessern oder die Achse streichen.
+- ~~**Dauer oben vs. unten**~~ → ⚠️ **beantwortet: das Band stimmt nicht, und
+  Dauer trennt nichts.** 2 von 28 im 15–35-s-Band, Median 58,5 s, und oben wie
+  unten identisch 58,5 s.
 - **Materialstufen-Verteilung** → wie stark das Feld auf Broadcast-Footage
   setzt. Wenn die Top-Shorts durchweg Stufe C sind, ist das eine strategische
   Information: Der Wettbewerb nimmt Claims in Kauf, und ein reiner

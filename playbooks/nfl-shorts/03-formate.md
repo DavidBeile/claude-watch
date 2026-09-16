@@ -321,18 +321,40 @@ Was sonst das Gesicht leistet, müssen hier drei Dinge übernehmen:
 
 ## Formatmechanik — was für alle gilt
 
-**Länge:** 15–35 Sekunden ist aktuell das Optimum. Länger nur, wenn die
-Retention es trägt.
+**Länge:** ⚠️ **Gemessen widerlegt — siehe [`analysis/findings.md`](analysis/findings.md).**
+Die ursprüngliche Annahme lautete „15–35 Sekunden ist das Optimum". In den 28
+analysierten NFL-Shorts liegen **2** in diesem Band; der Median ist **58,5 s**.
+Entscheidend: zwischen der oberen und der unteren Hälfte nach Views gibt es
+**keinen Unterschied** — 58,5 s gegen 58,5 s. **Dauer trennt in dieser Nische
+nichts.** Das erfolgreichste Short im Feld (3,8 Mio.) ist 58 s lang.
+Richte die Länge also nach dem Inhalt, nicht nach einem Band.
 
 **Die ersten zwei Sekunden entscheiden alles.** Kein Intro, kein Logo, kein
 "Servus Leute". Das erste Wort ist der Hook.
 
-Fünf funktionierende Hook-Typen:
+**Der gemessene Hook-Typ steht an erster Stelle** — er kam in der ursprünglichen
+Fünferliste gar nicht vor:
+
+0. **Superlativ über eine Einzelszene** (`superlative-play`) — **namentlich
+   genannter Spieler** plus **Wertung über genau eine Spielszene**, beides in den
+   ersten Sekunden. „This throw from Patrick Mahomes yesterday was *insane*."
+   Innerhalb eines Kanals (Kollmann, n=20 auswertbar): Median **539.500** Views
+   gegenüber **123.500** für alle anderen Muster — **Faktor 4,4**.
+   ⚠️ n=8 gegen n=12, Musterzuordnung ist ein Urteil, und Spielerbekanntheit ist
+   nicht kontrolliert. Starker Hinweis, kein Beweis.
+
+Die ursprünglich angenommenen fünf Typen — unverändert plausibel, aber in den
+28 gemessenen Shorts **kaum belegt** (18 von 28 ließen sich keinem zuordnen):
 1. **Frage mit Wissenslücke** — "Weißt du, warum …?"
 2. **Zahl** — Ziffer groß im Bild, bevor gesprochen wird
 3. **Konträre Behauptung** — "Alle sagen X. Falsch."
 4. **Konflikt** — "Zwei Spieler, eine Position, ein Problem."
 5. **Visueller Bruch** — etwas Unerwartetes im ersten Frame
+
+**Was die Messung als Gegenbild zeigt** — die schwächsten Shorts desselben Kanals
+öffnen mit Spielkontext statt Spieler („A missed field goal on the opening drive
+for Chicago", 46k), mit Reihenbezug („Next up, we've got Geno Smith", 536) oder
+mitten im Gedanken („It's the same issue though", 29k).
 
 **Text im Bild:** Hoher Anteil der Shorts läuft stumm. Kernaussagen müssen
 lesbar sein.
